@@ -1,0 +1,13 @@
+name: ${project.name}
+description: ${project.description}
+website: ${project.url}
+version: ${plugin.version}
+authors: [${git.branch.authors}]
+main: fr.mrcubee.waypoint.WayPoint
+commands:
+  gps:
+    usage: |
+      /gps <x> <z>
+      /gps <x> <z> <world>
+      /gps <x> <y> <z>
+      /gps <x> <y> <z> <world>
