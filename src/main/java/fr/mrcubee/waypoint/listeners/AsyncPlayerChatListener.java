@@ -25,7 +25,7 @@ public class AsyncPlayerChatListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void event(final AsyncPlayerChatEvent event) {
-        final String message = event.getMessage();
+        final String message = String.format(event.getFormat(), event.getPlayer().getName(), event.getMessage());
         final Matcher matcher = COORDINATE_PATTERN.matcher(message);
         final List<BaseComponent> messageList = new LinkedList<BaseComponent>();
         final BaseComponent[] newMessage;
