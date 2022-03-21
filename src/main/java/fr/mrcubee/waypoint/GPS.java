@@ -68,7 +68,7 @@ public class GPS extends BukkitRunnable {
             if (targetLocation instanceof WayPoint)
                 sendActionBar(player, targetLocation, "gps.action_bar.waypoint", ((WayPoint) targetLocation).getName());
             else
-                sendActionBar(player, targetLocation, "gps.action_bar.waypoint", ((WayPoint) targetLocation).getName());
+                sendActionBar(player, targetLocation, "gps.action_bar.location", null);
             return true;
         }
         return false;
