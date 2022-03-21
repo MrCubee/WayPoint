@@ -1,7 +1,3 @@
-# Death waypoint name
-waypoint.death.format=mort_%s%s%s%s
-
-
 # GPS
 gps.action_bar.location=&6%s &b[x: %d, y: %d, z: %d] &7dans &6%d &7blocs
 gps.action_bar.waypoint=&6%s &b[nom: %6$s x: %d, y: %d, z: %d] &7dans &6%d &7blocs
@@ -25,6 +21,6 @@ waypoint.command.not_exist=&cLe waypoint n'existe pas.
 waypoint.command.created=&aLe waypoint &e%s &aa été créé.
 waypoint.command.removed=&aLe waypoint &e%s &aa été supprimé.
 
-# Death Waypoint
+# Death waypoint name
 
-waypoint.death.name=Dernière mort
+waypoint.death.name=mort_%s%s%s%s

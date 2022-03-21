@@ -25,7 +25,7 @@ public class PlayerDeathListener implements Listener {
         final Player player = event.getPlayer();
         final Location playerLocation = player.getLocation();
         final Date date = new Date();
-        final String waypointName = Lang.getMessage(player, "waypoint.death.format", "ERROR", false,
+        final String waypointName = Lang.getMessage(player, "waypoint.death.name", "LANG ERROR", false,
                 formatNumber(date.getDate()),
                 formatNumber(date.getHours()),
                 formatNumber(date.getMinutes()),
