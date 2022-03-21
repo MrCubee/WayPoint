@@ -45,6 +45,8 @@ public class GpsCommand implements CommandExecutor, TabCompleter {
             player.sendMessage(Lang.getMessage(player, "gps.command.stop", "&cLANG ERROR: gps.command.stop", true));
             return true;
         }
+        if (args.length < 2)
+            return false;
         switch (args[0].toLowerCase()) {
             case "waypoint":
                 wayPoint = WayPointStorage.getPlayerWayPoint(player, args[1]);
