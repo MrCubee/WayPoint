@@ -19,3 +19,7 @@ waypoint.command.already_exist=&cLe waypoint existe déjà.
 waypoint.command.not_exist=&cLe waypoint n'existe pas.
 waypoint.command.created=&aLe waypoint &e%s &aa été créé.
 waypoint.command.removed=&aLe waypoint &e%s &aa été supprimé.
+
+# Death Waypoint
+
+waypoint.death.name=Dernière mort

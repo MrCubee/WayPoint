@@ -4,6 +4,7 @@ import fr.mrcubee.langlib.Lang;
 import fr.mrcubee.waypoint.command.GpsCommand;
 import fr.mrcubee.waypoint.command.WaypointCommand;
 import fr.mrcubee.waypoint.listeners.AsyncPlayerChatListener;
+import fr.mrcubee.waypoint.listeners.PlayerDeathListener;
 import fr.mrcubee.waypoint.listeners.PlayerJoinQuitListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -38,6 +39,7 @@ public class WayPointPlugin extends JavaPlugin {
         this.gps.runTaskTimerAsynchronously(this, 0L, 5L);
         pluginManager.registerEvents(new AsyncPlayerChatListener(), this);
         pluginManager.registerEvents(new PlayerJoinQuitListener(), this);
+        pluginManager.registerEvents(new PlayerDeathListener(), this);
         getCommand("gps").setExecutor(new GpsCommand());
         getCommand("waypoint").setExecutor(new WaypointCommand());
         for (Player player : Bukkit.getOnlinePlayers())
