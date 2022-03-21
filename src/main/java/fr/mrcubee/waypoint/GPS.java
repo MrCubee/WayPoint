@@ -53,9 +53,11 @@ public class GPS extends BukkitRunnable {
                     LOCATIONS.remove(key);
             } else if (object instanceof WayPoint) {
                 targetLocation = (Location) object;
-                sendLocationDirection(key, targetLocation, "gps.action_bar.waypoint", ((WayPoint) targetLocation).getName());
-                if (targetLocation.distance(key.getLocation()) < 1)
+                if (targetLocation.distance(key.getLocation()) < 2) {
                     LOCATIONS.remove(key);
+                    key.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent());
+                } else
+                    sendLocationDirection(key, targetLocation, "gps.action_bar.waypoint", ((WayPoint) targetLocation).getName());
             } else if (object instanceof Location) {
                 targetLocation = (Location) object;
                 sendLocationDirection(key, targetLocation, "gps.action_bar.location", null);
