@@ -5,6 +5,7 @@ import fr.mrcubee.waypoint.tools.Direction;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -22,10 +23,20 @@ public class GPS extends BukkitRunnable {
 
     private static final Map<Player, Object> LOCATIONS = new WeakHashMap<Player, Object>();
 
-    private void sendLocationDirection(final Player player, final Location targetLocation, final String messageId, final String name) {
-        final String direction = Direction.getDirectionArrow(player, targetLocation);
-        final int distance = (int) Math.round(player.getLocation().distance(targetLocation));
-        final String message = Lang.getMessage(player, messageId, "&cLANG ERROR: " + messageId, true,
+    private void sendActionBar(final Player player, final Location targetLocation, final String messageId, final String name) {
+        final World targetWorld = targetLocation.getWorld();
+        final String direction;
+        final int distance;
+        final String message;
+
+        if (!player.getLocation().getWorld().equals(targetWorld)) {
+            message = Lang.getMessage(player, "gps.action_bar.change_world", "&cLANG ERROR: gps.action_bar.change_world", true, targetWorld.getName());
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
+            return;
+        }
+        direction = Direction.getDirectionArrow(player, targetLocation);
+        distance = (int) Math.round(player.getLocation().distance(targetLocation));
+        message = Lang.getMessage(player, messageId, "&cLANG ERROR: " + messageId, true,
                 direction,
                 targetLocation.getBlockX(),
                 targetLocation.getBlockY(),
@@ -35,36 +46,41 @@ public class GPS extends BukkitRunnable {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
     }
 
+    private boolean sendLocationDirection(final Player player, final Object target) {
+        final Player targetPlayer;
+        final Location targetLocation;
+
+        if (player == null || target == null)
+            return false;
+        if (target instanceof Player) {
+            targetPlayer = (Player) target;
+            if (!targetPlayer.isOnline())
+                return false;
+            sendActionBar(player, targetPlayer.getLocation(), "gps.action_bar.player", targetPlayer.getName());
+            return true;
+        }
+        if (target instanceof Location) {
+            targetLocation = (Location) target;
+            if (player.getWorld().equals(targetLocation.getWorld()) && targetLocation.distance(player.getLocation()) < 2) {
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent());
+                return false;
+            }
+            if (targetLocation instanceof WayPoint)
+                sendActionBar(player, targetLocation, "gps.action_bar.waypoint", ((WayPoint) targetLocation).getName());
+            else
+                sendActionBar(player, targetLocation, "gps.action_bar.waypoint", ((WayPoint) targetLocation).getName());
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void run() {
         Player key;
-        Object object;
-        Player targetPlayer;
-        Location targetLocation;
 
         for (Map.Entry<Player, Object> entry : getEntries()) {
             key = entry.getKey();
-            object = entry.getValue();
-            if (object instanceof Player) {
-                targetPlayer = (Player) object;
-                if (targetPlayer.isOnline())
-                    sendLocationDirection(key, targetPlayer.getLocation(), "gps.action_bar.player", targetPlayer.getName());
-                else
-                    LOCATIONS.remove(key);
-            } else if (object instanceof WayPoint) {
-                targetLocation = (Location) object;
-                if (targetLocation.distance(key.getLocation()) < 2) {
-                    LOCATIONS.remove(key);
-                    key.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent());
-                } else
-                    sendLocationDirection(key, targetLocation, "gps.action_bar.waypoint", ((WayPoint) targetLocation).getName());
-            } else if (object instanceof Location) {
-                targetLocation = (Location) object;
-                sendLocationDirection(key, targetLocation, "gps.action_bar.location", null);
-                if (targetLocation.distance(key.getLocation()) < 1)
-                    LOCATIONS.remove(key);
-            }
-            else
+            if (!sendLocationDirection(key, entry.getValue()))
                 LOCATIONS.remove(key);
         }
     }

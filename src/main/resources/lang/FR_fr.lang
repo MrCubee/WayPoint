@@ -2,6 +2,7 @@
 gps.action_bar.location=&6%s &b[x: %d, y: %d, z: %d] &7dans &6%d &7blocs
 gps.action_bar.waypoint=&6%s &b[nom: %6$s x: %d, y: %d, z: %d] &7dans &6%d &7blocs
 gps.action_bar.player=&6%s &b[joueur: %6$s x: %d, y: %d, z: %d] &7in &6%d &7blocks
+gps.action_bar.change_world=&7Vous devez aller dans le monde &6%s&7.
 
 # Command
 command.must_be_player=&cVous devez être un joueur pour exécuter cette commande.
