@@ -9,7 +9,7 @@ commands:
     description: Enables and disables GPS.
     usage: |
       §7--------------------- [§a${project.name}§7] ---------------------
-      §7- §a/gps stop &f- &7Disable GPS.
+      §7- §a/gps stop §f- §7Disable GPS.
       §7- §a/gps <x> <z> §f- §7Enable GPS on the desired coordinate.
       §7- §a/gps <x> <z> <world> §f- §7Enable GPS on the desired coordinate.
       §7- §a/gps <x> <y> <z> &f- §7Enable GPS on the desired coordinate.
