@@ -1,3 +1,7 @@
+# Death waypoint name
+waypoint.death.format=mort_%s%s%s%s
+
+
 # GPS
 gps.action_bar.location=&6%s &b[x: %d, y: %d, z: %d] &7dans &6%d &7blocs
 gps.action_bar.waypoint=&6%s &b[nom: %6$s x: %d, y: %d, z: %d] &7dans &6%d &7blocs
