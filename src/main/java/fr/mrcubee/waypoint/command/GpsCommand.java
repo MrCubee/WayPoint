@@ -56,7 +56,7 @@ public class GpsCommand implements CommandExecutor, TabCompleter {
             case "player":
                 targetPlayer = Bukkit.getPlayerExact(args[1]);
                 if (targetPlayer == null)
-                    player.sendMessage("");
+                    player.sendMessage(Lang.getMessage(player, "gps.command.player.not_exist", "&cLANG ERROR: gps.command.player.not_exist", true));
                 else
                     GPS.setLocation(player, targetPlayer);
                 return true;
@@ -64,7 +64,7 @@ public class GpsCommand implements CommandExecutor, TabCompleter {
                 location = LocationTools.getLocationFromArguments(player, args);
                 if (location != null) {
                     GPS.setLocation(player, location);
-                    player.sendMessage(ChatColor.GRAY + "GPS is on.");
+                    player.sendMessage(Lang.getMessage(player, "gps.command.start", "&cLANG ERROR: gps.command.start", true));
                     return true;
                 }
                 return false;

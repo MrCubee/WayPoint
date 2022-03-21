@@ -32,7 +32,6 @@ public class GPS extends BukkitRunnable {
                 targetLocation.getBlockZ(),
                 distance,
                 name);
-
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
     }
 

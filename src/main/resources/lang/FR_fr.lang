@@ -8,7 +8,9 @@ command.must_be_player=&cVous devez être un joueur pour exécuter cette command
 
 # GPS Command
 
-gps.command.stop=&7Le GPS est arrêté.
+gps.command.start=&7Le GPS est activé.
+gps.command.stop=&7Le GPS est désactivé.
+gps.command.player.not_exist=&cLe joueur n'existe pas ou n'est pas en ligne.
 gps.command.waypoint.not_exist=&cLe waypoint n'existe pas.
 
 # Waypoint command
