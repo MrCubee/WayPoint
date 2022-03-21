@@ -59,9 +59,9 @@
         </dependency>
         <dependency>
             <groupId>fr.mrcubee.minecraft.library</groupId>
-            <artifactId>plugin-finder</artifactId>
+            <artifactId>languagelib</artifactId>
             <version>1.0</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

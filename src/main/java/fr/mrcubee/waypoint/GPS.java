@@ -1,8 +1,9 @@
 package fr.mrcubee.waypoint;
 
+import fr.mrcubee.langlib.Lang;
+import fr.mrcubee.waypoint.tools.Direction;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -12,21 +13,26 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+/**
+ * @author MrCubee
+ * @since 1.0
+ * @version 1.0
+ */
 public class GPS extends BukkitRunnable {
-
-    private static final String MESSAGE_FORMAT = ChatColor.translateAlternateColorCodes('&', "&6%s &b[x:%d, y: %d, z: %d] &7in &6%s &7%s");
 
     private static final Map<Player, Object> LOCATIONS = new WeakHashMap<Player, Object>();
 
-    private void sendDirection(final Player player, final Location location) {
-        String direction = Direction.getDirectionArrow(player, location);
-        int distance = (int) Math.round(player.getLocation().distance(location));
-        final String message = String.format(MESSAGE_FORMAT,
+    private void sendLocationDirection(final Player player, final Location targetLocation, final String messageId, final String name) {
+        final String direction = Direction.getDirectionArrow(player, targetLocation);
+        final int distance = (int) Math.round(player.getLocation().distance(targetLocation));
+        final String message = Lang.getMessage(player, messageId, "&cLANG ERROR: " + messageId, true,
                 direction,
-                location.getBlockX(),
-                location.getBlockY(),
-                location.getBlockZ(),
-                distance, distance > 1 ? "blocks" : "block");
+                targetLocation.getBlockX(),
+                targetLocation.getBlockY(),
+                targetLocation.getBlockZ(),
+                distance,
+                name);
+
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
     }
 
@@ -35,6 +41,7 @@ public class GPS extends BukkitRunnable {
         Player key;
         Object object;
         Player targetPlayer;
+        Location targetLocation;
 
         for (Map.Entry<Player, Object> entry : getEntries()) {
             key = entry.getKey();
@@ -42,11 +49,20 @@ public class GPS extends BukkitRunnable {
             if (object instanceof Player) {
                 targetPlayer = (Player) object;
                 if (targetPlayer.isOnline())
-                    sendDirection(key, targetPlayer.getLocation());
+                    sendLocationDirection(key, targetPlayer.getLocation(), "gps.action_bar.player", targetPlayer.getName());
                 else
                     LOCATIONS.remove(key);
-            } else if (object instanceof Location)
-                sendDirection(key, (Location) object);
+            } else if (object instanceof WayPoint) {
+                targetLocation = (Location) object;
+                sendLocationDirection(key, targetLocation, "gps.action_bar.waypoint", ((WayPoint) targetLocation).getName());
+                if (targetLocation.distance(key.getLocation()) < 1)
+                    LOCATIONS.remove(key);
+            } else if (object instanceof Location) {
+                targetLocation = (Location) object;
+                sendLocationDirection(key, targetLocation, "gps.action_bar.location", null);
+                if (targetLocation.distance(key.getLocation()) < 1)
+                    LOCATIONS.remove(key);
+            }
             else
                 LOCATIONS.remove(key);
         }
@@ -55,7 +71,7 @@ public class GPS extends BukkitRunnable {
     public static void setLocation(final Player player, final Location location) {
         if (player == null || location == null || location.getWorld() == null)
             return;
-        LOCATIONS.put(player, location);
+        LOCATIONS.put(player, location.clone());
     }
 
     public static void setLocation(final Player player, final Player target) {
@@ -85,7 +101,7 @@ public class GPS extends BukkitRunnable {
             }
             return targetPlayer.getLocation();
         } else if (object instanceof Location)
-            return (Location) object;
+            return ((Location) object).clone();
         LOCATIONS.remove(player);
         return null;
     }

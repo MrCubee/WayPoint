@@ -1,80 +1,92 @@
 package fr.mrcubee.waypoint.command;
 
+import fr.mrcubee.langlib.Lang;
 import fr.mrcubee.waypoint.GPS;
-import fr.mrcubee.waypoint.listeners.AsyncPlayerChatListener;
+import fr.mrcubee.waypoint.WayPoint;
+import fr.mrcubee.waypoint.WayPointStorage;
+import fr.mrcubee.waypoint.tools.LocationTools;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-public class GpsCommand implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
-    private Integer[] convertToInteger(String... args) {
-        final Integer[] results = new Integer[args.length];
-        final int max = Math.min(3, args.length);
-
-        for (int i = 0; i < max; i++) {
-            try {
-                results[i] = Integer.parseInt(args[i]);
-            } catch (NumberFormatException ignored) {
-                results[i] = null;
-            }
-        }
-        return results;
-    }
-
-    private Location getLocation(final Player player, final String[] args) {
-        final Integer[] integers;
-        World world;
-
-        if (args.length < 2)
-            return null;
-        integers = convertToInteger(args);
-        if (integers[0] == null || integers[1] == null)
-            return null;
-        if (args.length < 3) {
-            world = player.getWorld();
-            return new Location(world, integers[0], world.getHighestBlockYAt(integers[0], integers[1]), integers[1]);
-        } else if (args.length < 4) {
-            if (integers[2] != null) {
-                world = player.getWorld();
-                return new Location(world, integers[0], integers[1], integers[2]);
-            }
-            world = AsyncPlayerChatListener.getWorld(args[2]);
-            if (world == null)
-                return null;
-            return new Location(world, integers[0], world.getHighestBlockYAt(integers[0], integers[1]), integers[1]);
-        }
-        world = AsyncPlayerChatListener.getWorld(args[3]);
-        if (world == null)
-            return null;
-        return new Location(world, integers[0], integers[1], integers[2]);
-    }
+/**
+ * @author MrCubee
+ * @since 1.0
+ * @version 1.0
+ */
+public class GpsCommand implements CommandExecutor, TabCompleter {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
         final Player player;
         final Location location;
+        final WayPoint wayPoint;
+        final Player targetPlayer;
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "You must be a player to run this command.");
+            sender.sendMessage(Lang.getMessage("command.must_be_player", "&cLANG ERROR: command.must_be_player", true));
             return true;
         }
         player = (Player) sender;
-        if (args.length == 0) {
+        if (args.length < 1)
+            return false;
+        if (args[0].equalsIgnoreCase("stop")) {
             GPS.removeLocation(player);
-            player.sendMessage(ChatColor.GRAY + "The GPS is stopped.");
+            player.sendMessage(Lang.getMessage(player, "gps.command.stop", "&cLANG ERROR: gps.command.stop", true));
             return true;
         }
-        location = getLocation(player, args);
-        if (location == null)
-            return false;
-        GPS.setLocation(player, location);
-        player.sendMessage(ChatColor.GRAY + "GPS is on.");
-        return true;
+        switch (args[0].toLowerCase()) {
+            case "waypoint":
+                wayPoint = WayPointStorage.getPlayerWayPoint(player, args[1]);
+                if (wayPoint == null)
+                    player.sendMessage(Lang.getMessage(player, "gps.command.waypoint.not_exist", "&cLANG ERROR: gps.command.waypoint.not_exist", true));
+                else
+                    GPS.setLocation(player, wayPoint);
+                return true;
+            case "player":
+                targetPlayer = Bukkit.getPlayerExact(args[1]);
+                if (targetPlayer == null)
+                    player.sendMessage("");
+                else
+                    GPS.setLocation(player, targetPlayer);
+                return true;
+            default:
+                location = LocationTools.getLocationFromArguments(player, args);
+                if (location != null) {
+                    GPS.setLocation(player, location);
+                    player.sendMessage(ChatColor.GRAY + "GPS is on.");
+                    return true;
+                }
+                return false;
+        }
     }
 
+    @Override
+    public List<String> onTabComplete(final CommandSender sender, final Command command, final String label, final String[] args) {
+        final Set<String> wayPointsName;
+
+        if (!(sender instanceof Player))
+            return null;
+        if (args.length == 1)
+            return Arrays.asList("stop", "waypoint", "player");
+        if (args.length == 2 && args[0].equalsIgnoreCase("waypoint")) {
+            wayPointsName = WayPointStorage.getPlayerWaypointsName((Player) sender);
+            if (wayPointsName == null)
+                return new ArrayList<String>();
+            return new ArrayList<String>(wayPointsName);
+        }
+        if (args.length == 2 && args[0].equalsIgnoreCase("player"))
+            return null;
+        return new ArrayList<String>();
+    }
 }

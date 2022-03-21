@@ -1,9 +1,14 @@
-package fr.mrcubee.waypoint;
+package fr.mrcubee.waypoint.tools;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+/**
+ * @author MrCubee
+ * @since 1.0
+ * @version 1.0
+ */
 public enum Direction {
 
     FORWARD,
