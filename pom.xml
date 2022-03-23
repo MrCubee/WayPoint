@@ -6,10 +6,10 @@
 
     <groupId>fr.mrcubee.minecraft.plugin</groupId>
     <artifactId>waypoint</artifactId>
-    <version>1.1</version>
+    <version>1.1.1</version>
     <packaging>jar</packaging>
 
-    <name>WayPoint</name>
+    <name>Waypoint</name>
     <description>Bukkit plugin for easy orientation with coordinates.</description>
     <url>https://github.com/MrCubee/WayPoint</url>
 
