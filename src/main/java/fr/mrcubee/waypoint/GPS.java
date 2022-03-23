@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author MrCubee
@@ -21,7 +21,7 @@ import java.util.WeakHashMap;
  */
 public class GPS extends BukkitRunnable {
 
-    private static final Map<Player, Object> LOCATIONS = new WeakHashMap<Player, Object>();
+    private static final Map<Player, Object> LOCATIONS = new ConcurrentHashMap<Player, Object>();
 
     private void sendActionBar(final Player player, final Location targetLocation, final String messageId, final String name) {
         final World targetWorld = targetLocation.getWorld();

@@ -1,6 +1,8 @@
 package fr.mrcubee.waypoint.listeners;
 
+import fr.mrcubee.waypoint.GPS;
 import fr.mrcubee.waypoint.WayPointStorage;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -17,8 +19,11 @@ public class PlayerJoinQuitListener implements Listener {
 
     @EventHandler
     public void eventQuit(final PlayerQuitEvent event) {
+        final Player player = event.getPlayer();
+
+        GPS.removeLocation(player);
         try {
-            WayPointStorage.savePlayerWaypoints(event.getPlayer());
+            WayPointStorage.savePlayerWaypoints(player);
         } catch (IOException exception) {
             exception.printStackTrace();
         }
