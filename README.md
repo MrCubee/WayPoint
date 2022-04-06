@@ -8,3 +8,5 @@ Bukkit plugin for easy orientation with coordinates.
 
 ## Create waypoint 
 ![Waypoint](.github/resources/waypoint.gif)
+
+toto
