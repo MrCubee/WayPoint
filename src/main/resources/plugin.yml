@@ -4,6 +4,7 @@ website: ${project.url}
 version: ${plugin.version}
 authors: [${git.branch.authors}]
 main: fr.mrcubee.waypoint.WayPointPlugin
+api-version: 1.13
 commands:
   gps:
     description: Enables and disables GPS.
