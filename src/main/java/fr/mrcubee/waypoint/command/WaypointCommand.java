@@ -1,7 +1,11 @@
 package fr.mrcubee.waypoint.command;
 
 import fr.mrcubee.langlib.Lang;
+import fr.mrcubee.waypoint.WayPoint;
 import fr.mrcubee.waypoint.WayPointStorage;
+import fr.mrcubee.waypoint.event.Events;
+import fr.mrcubee.waypoint.event.PlayerCreateWaypointEvent;
+import fr.mrcubee.waypoint.event.PlayerRemoveWaypointEvent;
 import fr.mrcubee.waypoint.tools.LocationTools;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -19,6 +23,9 @@ public class WaypointCommand implements CommandExecutor, TabExecutor {
 
     private boolean createWayPoint(final Player player, final String[] args) {
         final Location location;
+        final PlayerCreateWaypointEvent event;
+        final WayPoint newWayPoint;
+        final boolean created;
 
         if (args.length < 1)
             return false;
@@ -30,20 +37,37 @@ public class WaypointCommand implements CommandExecutor, TabExecutor {
             location = player.getLocation();
         if (location == null)
             return false;
-        if (WayPointStorage.addPlayerWaypoint(player, args[0], location))
-            player.sendMessage(Lang.getMessage(player, "waypoint.command.created", "&cLANG ERROR: waypoint.command.created", true, args[0]));
-        else
+        if (WayPointStorage.getPlayerWayPoint(player, args[0]) != null) {
             player.sendMessage(Lang.getMessage(player, "waypoint.command.already_exist", "&cLANG ERROR: waypoint.command.already_exist", true));
+            return true;
+        }
+        event = new PlayerCreateWaypointEvent(player, new WayPoint(args[0], location));
+        if (!Events.call(event))
+            return true;
+        newWayPoint = event.getNewWayPoint();
+        if (newWayPoint != null)
+            created = WayPointStorage.addPlayerWaypoint(player, newWayPoint.getName(), newWayPoint.cloneLocation());
+        else
+            created = WayPointStorage.addPlayerWaypoint(player, args[0], location);
+        if (created)
+            player.sendMessage(Lang.getMessage(player, "waypoint.command.created", "&cLANG ERROR: waypoint.command.created", true, args[0]));
         return true;
     }
 
     private boolean removeWayPoint(final Player player, final String[] args) {
+        final WayPoint wayPoint;
+
         if (args.length < 1)
             return false;
+        wayPoint = WayPointStorage.getPlayerWayPoint(player, args[0]);
+        if (wayPoint == null) {
+            player.sendMessage(Lang.getMessage(player, "waypoint.command.not_exist", "&cLANG ERROR: waypoint.command.not_exist", true));
+            return true;
+        }
+        if (!Events.call(new PlayerRemoveWaypointEvent(player, wayPoint)))
+            return true;
         if (WayPointStorage.removePlayerWaypoint(player, args[0]) != null)
             player.sendMessage(Lang.getMessage(player, "waypoint.command.removed", "&cLANG ERROR: waypoint.command.removed", true, args[0]));
-        else
-            player.sendMessage(Lang.getMessage(player, "waypoint.command.not_exist", "&cLANG ERROR: waypoint.command.not_exist", true));
         return true;
     }
 

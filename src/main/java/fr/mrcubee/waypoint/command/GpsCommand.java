@@ -4,6 +4,8 @@ import fr.mrcubee.langlib.Lang;
 import fr.mrcubee.waypoint.GPS;
 import fr.mrcubee.waypoint.WayPoint;
 import fr.mrcubee.waypoint.WayPointStorage;
+import fr.mrcubee.waypoint.event.Events;
+import fr.mrcubee.waypoint.event.PlayerStartGPSEvent;
 import fr.mrcubee.waypoint.tools.LocationTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -49,26 +51,33 @@ public class GpsCommand implements CommandExecutor, TabCompleter {
         switch (args[0].toLowerCase()) {
             case "waypoint":
                 wayPoint = WayPointStorage.getPlayerWayPoint(player, args[1]);
-                if (wayPoint == null)
+                if (wayPoint == null) {
                     player.sendMessage(Lang.getMessage(player, "gps.command.waypoint.not_exist", "&cLANG ERROR: gps.command.waypoint.not_exist", true));
-                else
-                    GPS.setLocation(player, wayPoint);
+                    return true;
+                }
+                if (!Events.call(new PlayerStartGPSEvent(player, wayPoint)))
+                    return true;
+                 GPS.setLocation(player, wayPoint);
                 return true;
             case "player":
                 targetPlayer = Bukkit.getPlayerExact(args[1]);
-                if (targetPlayer == null)
+                if (targetPlayer == null) {
                     player.sendMessage(Lang.getMessage(player, "gps.command.player.not_exist", "&cLANG ERROR: gps.command.player.not_exist", true));
-                else
-                    GPS.setLocation(player, targetPlayer);
+                    return true;
+                }
+                if (!Events.call(new PlayerStartGPSEvent(player, targetPlayer)))
+                    return true;
+                GPS.setLocation(player, targetPlayer);
                 return true;
             default:
                 location = LocationTools.getLocationFromArguments(player, args);
-                if (location != null) {
-                    GPS.setLocation(player, location);
-                    player.sendMessage(Lang.getMessage(player, "gps.command.start", "&cLANG ERROR: gps.command.start", true));
+                if (location == null)
+                    return false;
+                if (!Events.call(new PlayerStartGPSEvent(player, location)))
                     return true;
-                }
-                return false;
+                GPS.setLocation(player, location);
+                player.sendMessage(Lang.getMessage(player, "gps.command.start", "&cLANG ERROR: gps.command.start", true));
+                return true;
         }
     }
 

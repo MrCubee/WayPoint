@@ -22,6 +22,10 @@ public class WayPoint extends Location {
         return new WayPoint(this.name, this);
     }
 
+    public Location cloneLocation() {
+        return super.clone();
+    }
+
     public String getName() {
         return this.name;
     }

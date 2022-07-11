@@ -1,6 +1,8 @@
 package fr.mrcubee.waypoint;
 
 import fr.mrcubee.langlib.Lang;
+import fr.mrcubee.waypoint.event.Events;
+import fr.mrcubee.waypoint.event.PlayerStartGPSEvent;
 import fr.mrcubee.waypoint.tools.Direction;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
