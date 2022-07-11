@@ -17,13 +17,12 @@ public class WayPoint extends Location {
         this.name = name;
     }
 
-    @Override
-    public Location clone() {
+    public WayPoint clone() {
         return new WayPoint(this.name, this);
     }
 
     public Location cloneLocation() {
-        return super.clone();
+        return new Location(getWorld(), getX(), getY(), getZ(), getYaw(), getPitch());
     }
 
     public String getName() {

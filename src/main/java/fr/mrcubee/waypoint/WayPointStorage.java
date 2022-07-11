@@ -1,8 +1,6 @@
 package fr.mrcubee.waypoint;
 
-import com.google.common.io.Files;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -37,12 +35,20 @@ public class WayPointStorage implements ConfigurationSerializable {
     public boolean registerWayPoint(final WayPoint wayPoint) {
         if (wayPoint == null || wayPoint.getName() == null || wayPoint.getWorld() == null || this.waypoints.containsKey(wayPoint.getName()))
             return false;
-        this.waypoints.put(wayPoint.getName(), new Location(wayPoint.getWorld(), wayPoint.getX(), wayPoint.getY(), wayPoint.getZ()));
+        this.waypoints.put(wayPoint.getName(), wayPoint.cloneLocation());
         return true;
     }
 
-    public Set<String> getWayPointsName() {
-        return Collections.unmodifiableSet(this.waypoints.keySet());
+    public Set<String> getWaypointsName() {
+        return new HashSet<String>(this.waypoints.keySet());
+    }
+
+    public Set<WayPoint> getWaypoints() {
+        final Set<WayPoint> wayPoints = new HashSet<WayPoint>(this.waypoints.size());
+
+        for (final Map.Entry<String, Location> entry : this.waypoints.entrySet())
+            wayPoints.add(new WayPoint(entry.getKey(), entry.getValue()));
+        return wayPoints;
     }
 
     public WayPoint getFromName(final String name) {
@@ -83,7 +89,7 @@ public class WayPointStorage implements ConfigurationSerializable {
     public Map<String, Object> serialize() {
         final Map<String, Object> result = new HashMap<String, Object>();
 
-        for (Map.Entry<String, Location> entry : this.waypoints.entrySet())
+        for (final Map.Entry<String, Location> entry : this.waypoints.entrySet())
             result.put(entry.getKey(), entry.getValue());
         return result;
     }
@@ -93,7 +99,7 @@ public class WayPointStorage implements ConfigurationSerializable {
         String name;
         Location location;
 
-        for (Map.Entry<String, Object> entry : args.entrySet()) {
+        for (final Map.Entry<String, Object> entry : args.entrySet()) {
             name = entry.getKey();
             if (name != null && !name.equals("==")) {
                 location = (Location) entry.getValue();
@@ -107,6 +113,12 @@ public class WayPointStorage implements ConfigurationSerializable {
         return new WayPointStorage(wayPoints);
     }
 
+    public static WayPointStorage getStorage(final Player player) {
+        if (player == null)
+            return null;
+        return PLAYER_WAYPOINTS_STORAGES.get(player);
+    }
+
     public static Set<String> getPlayerWaypointsName(final Player player) {
         final WayPointStorage wayPointStorage;
 
@@ -115,7 +127,18 @@ public class WayPointStorage implements ConfigurationSerializable {
         wayPointStorage = PLAYER_WAYPOINTS_STORAGES.get(player);
         if (wayPointStorage == null)
             return null;
-        return wayPointStorage.getWayPointsName();
+        return wayPointStorage.getWaypointsName();
+    }
+
+    public static Set<WayPoint> getPlayerWaypoints(final Player player) {
+        final WayPointStorage wayPointStorage;
+
+        if (player == null)
+            return null;
+        wayPointStorage = PLAYER_WAYPOINTS_STORAGES.get(player);
+        if (wayPointStorage == null)
+            return null;
+        return wayPointStorage.getWaypoints();
     }
 
     public static WayPoint getPlayerWayPoint(final Player player, final String wayPointName) {
@@ -195,6 +218,14 @@ public class WayPointStorage implements ConfigurationSerializable {
             return;
         wayPointStorage = fileConfiguration.getObject("storage", WayPointStorage.class);
         PLAYER_WAYPOINTS_STORAGES.put(player, wayPointStorage);
+    }
+
+    public static int countTotalWaypoint() {
+        int total = 0;
+
+        for (final WayPointStorage wayPointStorage : PLAYER_WAYPOINTS_STORAGES.values())
+            total += wayPointStorage.count();
+        return total;
     }
 
 }

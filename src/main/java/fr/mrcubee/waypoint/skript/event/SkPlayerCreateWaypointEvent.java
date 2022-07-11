@@ -5,17 +5,7 @@ import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser;
 import org.bukkit.event.Event;
 
-public class SkPlayerCreateWaypointEvent extends SkriptEvent {
-
-    @Override
-    public boolean init(Literal<?>[] literals, int i, SkriptParser.ParseResult parseResult) {
-        return true;
-    }
-
-    @Override
-    public boolean check(Event event) {
-        return true;
-    }
+public class SkPlayerCreateWaypointEvent extends SkEvent {
 
     @Override
     public String toString(Event event, boolean b) {

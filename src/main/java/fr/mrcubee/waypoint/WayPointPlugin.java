@@ -7,6 +7,7 @@ import fr.mrcubee.waypoint.listeners.AsyncPlayerChatListener;
 import fr.mrcubee.waypoint.listeners.PlayerDeathListener;
 import fr.mrcubee.waypoint.listeners.PlayerJoinQuitListener;
 import fr.mrcubee.waypoint.skript.WaypointSkriptRegister;
+import fr.mrcubee.waypoint.stats.bstats.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -23,18 +24,30 @@ import java.io.IOException;
 public class WayPointPlugin extends JavaPlugin {
 
     private static WayPointPlugin instance;
+    private static boolean skriptAddonUsed;
 
+    private Metrics bstatsMetrics;
     private GPS gps;
 
     @Override
     public void onLoad() {
         instance = this;
+        skriptAddonUsed = false;
     }
 
     @Override
     public void onEnable() {
         final PluginManager pluginManager = getServer().getPluginManager();
 
+        this.bstatsMetrics = new Metrics(this, 15441);
+        this.bstatsMetrics.addCustomChart(new Metrics.SingleLineChart("waypoints", WayPointStorage::countTotalWaypoint));
+        this.bstatsMetrics.addCustomChart(new Metrics.SimplePie("skript_installed", () -> {
+            if (WayPointPlugin.isSkriptInstalled())
+                return "true";
+            WayPointPlugin.skriptAddonUsed = false;
+            return "false";
+        }));
+        this.bstatsMetrics.addCustomChart(new Metrics.SimplePie("skript_used", () -> WayPointPlugin.skriptAddonUsed ? "true" : "false"));
         saveDefaultConfig();
         Lang.setDefaultLang(getConfig().getString("default_lang"));
         this.gps = new GPS();
@@ -44,7 +57,7 @@ public class WayPointPlugin extends JavaPlugin {
         pluginManager.registerEvents(new PlayerDeathListener(), this);
         if (isSkriptInstalled()) {
             getLogger().info(Lang.getMessage("core.skript.load", "&cLANG ERROR: core.skript.load",true));
-            WaypointSkriptRegister.register();
+            WaypointSkriptRegister.register(this);
         } else
             getLogger().warning(Lang.getMessage("core.skript.compatibility", "&cLANG ERROR: core.skript.compatibility", true));
         getCommand("gps").setExecutor(new GpsCommand());
@@ -64,10 +77,14 @@ public class WayPointPlugin extends JavaPlugin {
         }
     }
 
-    private boolean isSkriptInstalled() {
+    public static boolean isSkriptInstalled() {
         final Plugin plugin = Bukkit.getPluginManager().getPlugin("Skript");
 
         return plugin != null;
+    }
+
+    public static void skriptAddonUsed() {
+        skriptAddonUsed = true;
     }
 
     public GPS getGps() {

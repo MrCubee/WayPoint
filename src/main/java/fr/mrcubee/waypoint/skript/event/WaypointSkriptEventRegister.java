@@ -34,11 +34,11 @@ public class WaypointSkriptEventRegister {
 
         /* Waypoint Events */
         Skript.registerEvent("player waypoint create", SkPlayerCreateWaypointEvent.class, PlayerCreateWaypointEvent.class, "player create waypoint")
-                .description("Appelez lorsque le joueur crée un waypoint.")
-                .since("1.1.3");
+                .description("Call when the player creates a waypoint.")
+                .since("1.2");
         Skript.registerEvent("player remove waypoint", SkPlayerRemoveWaypointEvent.class, PlayerRemoveWaypointEvent.class, "player remove waypoint")
-                .description("Called when the player deletes a waypoint.")
-                .since("1.1.3");
+                .description("Call when the player deletes a waypoint.")
+                .since("1.2");
         EventValues.registerEventValue(WayPointEvent.class, WayPoint.class, new Getter<WayPoint, WayPointEvent>() {
             @Override
             public WayPoint get(final WayPointEvent event) {
