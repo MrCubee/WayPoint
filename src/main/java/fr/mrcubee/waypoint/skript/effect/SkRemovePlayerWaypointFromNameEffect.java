@@ -1,6 +1,5 @@
 package fr.mrcubee.waypoint.skript.effect;
 
-import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
@@ -8,13 +7,14 @@ import fr.mrcubee.waypoint.WayPointStorage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-public class SkRemovePlayerWaypointFromNameEffect extends Effect {
+public class SkRemovePlayerWaypointFromNameEffect extends SkEffect {
 
     private Expression<String> wayPointNamesExpression;
     private Expression<Player> playerExpression;
 
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+        super.init(expressions, matchedPattern, kleenean, parseResult);
         if (expressions == null || expressions.length < 2)
             return false;
         this.wayPointNamesExpression = (Expression<String>) expressions[0];
