@@ -12,8 +12,8 @@ public class WaypointSkriptRegister {
         Classes.registerClass(new ClassInfo<WayPoint>(WayPoint.class, "waypoint")
                 .user("waypoints?")
                 .name("Waypoint"));
-        Classes.registerClass(new ClassInfo<GPSEvent.TargetType>(GPSEvent.TargetType.class, "gps_target_type")
-                .user("gps_target_types?")
+        Classes.registerClass(new ClassInfo<GPSEvent.TargetType>(GPSEvent.TargetType.class, "gpstargettype")
+                .user("gpstargettypes?")
                 .name("Gps Target Type"));
         WaypointSkriptEventRegister.register();
     }

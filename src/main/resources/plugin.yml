@@ -3,6 +3,7 @@ description: ${project.description}
 website: ${project.url}
 version: ${plugin.version}
 authors: [${git.branch.authors}]
+softdepend: [Skript]
 main: fr.mrcubee.waypoint.WayPointPlugin
 api-version: 1.13
 commands:
