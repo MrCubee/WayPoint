@@ -1,3 +1,7 @@
+# Core
+core.skript.load=Load the internal Skript addon.
+core.skript.compatibility=This plugin can be used with Skript plugin.
+
 # GPS
 gps.action_bar.location=&6%s &b[x: %d, y: %d, z: %d] &7in &6%d &7blocks
 gps.action_bar.waypoint=&6%s &b[name: %6$s x: %d, y: %d, z: %d] &7in &6%d &7blocks
@@ -8,19 +12,16 @@ gps.action_bar.change_world=&7You must go to the &6%s &7world.
 command.must_be_player=&cYou must be a player to run this command.
 
 # GPS Command
-
 gps.command.start=&7GPS is enabled.
 gps.command.stop=&7GPS is disabled.
 gps.command.player.not_exist=&cThe player does not exist or is not online.
 gps.command.waypoint.not_exist=&cThe waypoint does not exist.
 
 # Waypoint command
-
 waypoint.command.already_exist=&cThe waypoint already exists.
 waypoint.command.not_exist=&cThe waypoint does not exist.
 waypoint.command.created=&aThe &e%s &awaypoint has been created.
 waypoint.command.removed=&aWaypoint &e%s &ahas been deleted.
 
 # Death waypoint name
-
 waypoint.death.name=lastdeath_%s%s%s%s
