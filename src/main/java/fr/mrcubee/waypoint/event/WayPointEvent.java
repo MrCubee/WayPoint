@@ -8,7 +8,7 @@ public abstract class WayPointEvent extends Event {
     private final WayPoint wayPoint;
 
     public WayPointEvent(final WayPoint wayPoint) {
-        this.wayPoint = wayPoint;
+        this.wayPoint = wayPoint.clone();
     }
 
     public WayPoint getWayPoint() {

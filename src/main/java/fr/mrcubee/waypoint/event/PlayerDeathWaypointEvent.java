@@ -5,13 +5,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
-public class PlayerCreateWaypointEvent extends PlayerEditableWaypointEvent implements Cancellable {
+public class PlayerDeathWaypointEvent extends PlayerEditableWaypointEvent implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
     private boolean cancelled;
 
-    public PlayerCreateWaypointEvent(final Player player, final WayPoint wayPoint) {
+    public PlayerDeathWaypointEvent(final Player player, final WayPoint wayPoint) {
         super(player, wayPoint);
         this.cancelled = false;
     }

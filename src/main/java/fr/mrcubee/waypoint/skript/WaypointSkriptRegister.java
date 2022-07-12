@@ -85,6 +85,22 @@ public class WaypointSkriptRegister {
                 .user("gpstargettypes?")
                 .name("Gps Target Type")
                 .since("1.2")
+                        .parser(new Parser<GPS.TargetType>() {
+                            @Override
+                            public String toString(final GPS.TargetType targetType, final int flags) {
+                                return targetType.name();
+                            }
+
+                            @Override
+                            public String toVariableNameString(GPS.TargetType targetType) {
+                                return targetType.name();
+                            }
+
+                            @Override
+                            public boolean canParse(final ParseContext context) {
+                                return false;
+                            }
+                        })
                 .serializer(new Serializer<GPS.TargetType>() {
                     @Override
                     public Fields serialize(GPS.TargetType targetType) throws NotSerializableException {

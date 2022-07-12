@@ -4,6 +4,8 @@ import fr.mrcubee.langlib.Lang;
 import fr.mrcubee.waypoint.GPS;
 import fr.mrcubee.waypoint.WayPoint;
 import fr.mrcubee.waypoint.WayPointStorage;
+import fr.mrcubee.waypoint.event.Events;
+import fr.mrcubee.waypoint.event.PlayerDeathWaypointEvent;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,9 +33,20 @@ public class PlayerDeathListener implements Listener {
                 formatNumber(date.getMinutes()),
                 formatNumber(date.getSeconds()));
         final WayPoint wayPoint = new WayPoint(waypointName, playerLocation);
+        final PlayerDeathWaypointEvent deathEvent;
+        final WayPoint newWaypoint;
 
-        WayPointStorage.addPlayerWaypoint(player, waypointName, playerLocation);
-        GPS.setLocationTarget(event.getPlayer(), wayPoint);
+        deathEvent = new PlayerDeathWaypointEvent(player, wayPoint);
+        if (!Events.call(deathEvent))
+            return;
+        newWaypoint = deathEvent.getNewWayPoint();
+        if (newWaypoint != null) {
+            WayPointStorage.addPlayerWaypoint(player, newWaypoint.getName(), newWaypoint.cloneLocation());
+            GPS.setLocationTarget(event.getPlayer(), newWaypoint);
+        } else {
+            WayPointStorage.addPlayerWaypoint(player, waypointName, playerLocation);
+            GPS.setLocationTarget(event.getPlayer(), wayPoint);
+        }
     }
 
 }

@@ -1,7 +1,7 @@
 name: ${project.name}
-description: ${project.description}
+description: "${project.description} Current version: ${plugin.version}"
 website: ${project.url}
-version: ${plugin.version}
+version: ${project.version}
 authors: [${git.branch.authors}]
 softdepend: [Skript]
 main: fr.mrcubee.waypoint.WayPointPlugin

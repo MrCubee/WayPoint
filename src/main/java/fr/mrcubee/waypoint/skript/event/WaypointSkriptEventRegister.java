@@ -16,10 +16,10 @@ public class WaypointSkriptEventRegister {
         /* GPS Events */
         Skript.registerEvent("player gps start", SkPlayerStartGPSEvent.class, PlayerStartGPSEvent.class, "player start gps")
                 .description("Call when the player turns on their GPS.")
-                .since("1.1.3");
+                .since("1.2");
         Skript.registerEvent("player gps stop", SkPlayerStopGPSEvent.class, PlayerStopGPSEvent.class, "player stop gps")
                 .description("Call when the player turns off their GPS.")
-                .since("1.1.3");
+                .since("1.2");
         EventValues.registerEventValue(GPSEvent.class, GPS.TargetType.class, new Getter<GPS.TargetType, GPSEvent>() {
             @Override
             public GPS.TargetType get(final GPSEvent event) {
@@ -39,6 +39,9 @@ public class WaypointSkriptEventRegister {
                 .since("1.2");
         Skript.registerEvent("player remove waypoint", SkPlayerRemoveWaypointEvent.class, PlayerRemoveWaypointEvent.class, "player remove waypoint")
                 .description("Call when the player deletes a waypoint.")
+                .since("1.2");
+        Skript.registerEvent("player death waypoint", SkPlayerCreateWaypointEvent.class, PlayerCreateWaypointEvent.class, "player death waypoint")
+                .description("Call when player death waypoint is created.")
                 .since("1.2");
         EventValues.registerEventValue(WayPointEvent.class, WayPoint.class, new Getter<WayPoint, WayPointEvent>() {
             @Override

@@ -50,7 +50,7 @@ public class WaypointCommand implements CommandExecutor, TabExecutor {
         else
             created = WayPointStorage.addPlayerWaypoint(player, args[0], location);
         if (created)
-            player.sendMessage(Lang.getMessage(player, "waypoint.command.created", "&cLANG ERROR: waypoint.command.created", true, args[0]));
+            player.sendMessage(Lang.getMessage(player, "waypoint.command.created", "&cLANG ERROR: waypoint.command.created", true, newWayPoint == null ? args[0] : newWayPoint.getName()));
         return true;
     }
 
