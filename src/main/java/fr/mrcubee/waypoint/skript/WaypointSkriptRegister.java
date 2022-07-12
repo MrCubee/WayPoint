@@ -4,6 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.classes.Serializer;
+import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.yggdrasil.Fields;
 import fr.mrcubee.waypoint.WayPoint;
@@ -37,6 +38,11 @@ public class WaypointSkriptRegister {
                     @Override
                     public String toVariableNameString(WayPoint wayPoint) {
                         return wayPoint.getName();
+                    }
+
+                    @Override
+                    public boolean canParse(ParseContext context) {
+                        return false;
                     }
                 })
                 .serializer(new Serializer<WayPoint>() {
