@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>Waypoint</name>
-    <description>Bukkit plugin for easy orientation with coordinates.</description>
+    <description>Waypoint is good alternative to teleportation.</description>
     <url>https://github.com/MrCubee/WayPoint</url>
 
     <organization>
