@@ -30,6 +30,8 @@ public class SkAddPlayerWaypointEffect extends SkEffect {
         WayPointStorage storage;
         WayPoint wayPoint;
 
+        if (wayPoints.length < 1)
+            return;
         for (Player player : players) {
             wayPoint = wayPoints[0];
             WayPointStorage.addPlayerWaypoint(player, wayPoint.getName(), wayPoint);
