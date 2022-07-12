@@ -11,7 +11,7 @@ public abstract class SkEvent extends SkriptEvent {
     @Override
     public boolean init(Literal<?>[] literals, int i, SkriptParser.ParseResult parseResult) {
         WayPointPlugin.skriptAddonUsed();
-        return false;
+        return true;
     }
 
     @Override
