@@ -1,8 +1,6 @@
 package fr.mrcubee.waypoint;
 
 import fr.mrcubee.langlib.Lang;
-import fr.mrcubee.waypoint.event.Events;
-import fr.mrcubee.waypoint.event.PlayerStartGPSEvent;
 import fr.mrcubee.waypoint.tools.Direction;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -22,6 +20,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version 1.0
  */
 public class GPS extends BukkitRunnable {
+
+    public static enum TargetType {
+        LOCATION,
+        WAYPOINT,
+        PLAYER,
+        UNKNOWN;
+    }
 
     private static final Map<Player, Object> LOCATIONS = new ConcurrentHashMap<Player, Object>();
 
@@ -87,25 +92,67 @@ public class GPS extends BukkitRunnable {
         }
     }
 
-    public static void setLocation(final Player player, final Location location) {
+    public static void setLocationTarget(final Player player, final Location location) {
         if (player == null || location == null || location.getWorld() == null)
             return;
         LOCATIONS.put(player, location.clone());
     }
 
-    public static void setLocation(final Player player, final Player target) {
+    public static void setTarget(final Player player, final Player target) {
         if (player == null || target == null)
             return;
         LOCATIONS.put(player, target);
     }
 
-    public static void removeLocation(final Player player) {
+    public static void removeTarget(final Player player) {
         if (player == null)
             return;
         LOCATIONS.remove(player);
     }
 
-    public static Location getLocation(final Player player) {
+    public static TargetType getTargetType(final Player player) {
+        final Object target;
+
+        if (player == null)
+            return null;
+        target = LOCATIONS.get(player);
+        if (target == null)
+            return null;
+        if (target instanceof Player)
+            return TargetType.PLAYER;
+        if (target instanceof WayPoint)
+            return TargetType.WAYPOINT;
+        if (target instanceof Location)
+            return TargetType.LOCATION;
+        return TargetType.UNKNOWN;
+    }
+
+    public static Object getTarget(final Player player) {
+        if (player == null)
+            return null;
+        return LOCATIONS.get(player);
+    }
+
+    public static <T> T getTarget(final Player player, final Class<T> classTarget) {
+        final Object target;
+
+        if (player == null)
+            return null;
+        target = LOCATIONS.get(player);
+        if (classTarget.isInstance(target))
+            return classTarget.cast(target);;
+        return null;
+    }
+
+    public static WayPoint getTargetAsWaypoint(final Player player) {
+        return getTarget(player, WayPoint.class);
+    }
+
+    public static Player getTargetAsPlayer(final Player player) {
+        return getTarget(player, Player.class);
+    }
+
+    public static Location getTargetLocation(final Player player) {
         final Object object;
         final Player targetPlayer;
 

@@ -3,6 +3,7 @@ package fr.mrcubee.waypoint.skript.event;
 import ch.njol.skript.Skript;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Getter;
+import fr.mrcubee.waypoint.GPS;
 import fr.mrcubee.waypoint.WayPoint;
 import fr.mrcubee.waypoint.event.*;
 import org.bukkit.entity.Player;
@@ -19,9 +20,9 @@ public class WaypointSkriptEventRegister {
         Skript.registerEvent("player gps stop", SkPlayerStopGPSEvent.class, PlayerStopGPSEvent.class, "player stop gps")
                 .description("Call when the player turns off their GPS.")
                 .since("1.1.3");
-        EventValues.registerEventValue(GPSEvent.class, GPSEvent.TargetType.class, new Getter<GPSEvent.TargetType, GPSEvent>() {
+        EventValues.registerEventValue(GPSEvent.class, GPS.TargetType.class, new Getter<GPS.TargetType, GPSEvent>() {
             @Override
-            public GPSEvent.TargetType get(final GPSEvent event) {
+            public GPS.TargetType get(final GPSEvent event) {
                 return event.getTargetType();
             }
         }, 0);

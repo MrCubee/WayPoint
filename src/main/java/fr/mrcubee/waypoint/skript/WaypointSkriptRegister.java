@@ -7,9 +7,9 @@ import ch.njol.skript.classes.Serializer;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.yggdrasil.Fields;
+import fr.mrcubee.waypoint.GPS;
 import fr.mrcubee.waypoint.WayPoint;
 import fr.mrcubee.waypoint.WayPointPlugin;
-import fr.mrcubee.waypoint.event.GPSEvent;
 import fr.mrcubee.waypoint.skript.effect.WaypointSkriptEffectRegister;
 import fr.mrcubee.waypoint.skript.event.WaypointSkriptEventRegister;
 import fr.mrcubee.waypoint.skript.expression.WaypointSkriptExpressionRegister;
@@ -81,13 +81,13 @@ public class WaypointSkriptRegister {
                     }
                 })
                 .cloner(WayPoint::clone));
-        Classes.registerClass(new ClassInfo<GPSEvent.TargetType>(GPSEvent.TargetType.class, "gpstargettype")
+        Classes.registerClass(new ClassInfo<GPS.TargetType>(GPS.TargetType.class, "gpstargettype")
                 .user("gpstargettypes?")
                 .name("Gps Target Type")
                 .since("1.2")
-                .serializer(new Serializer<GPSEvent.TargetType>() {
+                .serializer(new Serializer<GPS.TargetType>() {
                     @Override
-                    public Fields serialize(GPSEvent.TargetType targetType) throws NotSerializableException {
+                    public Fields serialize(GPS.TargetType targetType) throws NotSerializableException {
                         final Fields fields = new Fields();
 
                         fields.putPrimitive("ordinal", targetType.ordinal());
@@ -95,14 +95,14 @@ public class WaypointSkriptRegister {
                     }
 
                     @Override
-                    public void deserialize(GPSEvent.TargetType targetType, Fields fields) throws StreamCorruptedException, NotSerializableException {
+                    public void deserialize(GPS.TargetType targetType, Fields fields) throws StreamCorruptedException, NotSerializableException {
                         throw new NotSerializableException();
                     }
 
                     @Override
-                    protected GPSEvent.TargetType deserialize(Fields fields) throws StreamCorruptedException, NotSerializableException {
+                    protected GPS.TargetType deserialize(Fields fields) throws StreamCorruptedException, NotSerializableException {
                         final int ordinal = fields.getPrimitive("ordinal", int.class);
-                        final GPSEvent.TargetType[] targetTypes = GPSEvent.TargetType.values();
+                        final GPS.TargetType[] targetTypes = GPS.TargetType.values();
 
                         if (ordinal < 0 || ordinal >= targetTypes.length)
                             throw new NotSerializableException();

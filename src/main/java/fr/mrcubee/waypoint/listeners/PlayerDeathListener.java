@@ -33,7 +33,7 @@ public class PlayerDeathListener implements Listener {
         final WayPoint wayPoint = new WayPoint(waypointName, playerLocation);
 
         WayPointStorage.addPlayerWaypoint(player, waypointName, playerLocation);
-        GPS.setLocation(event.getPlayer(), wayPoint);
+        GPS.setLocationTarget(event.getPlayer(), wayPoint);
     }
 
 }

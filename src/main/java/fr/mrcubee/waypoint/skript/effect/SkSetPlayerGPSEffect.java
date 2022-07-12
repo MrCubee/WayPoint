@@ -31,7 +31,7 @@ public class SkSetPlayerGPSEffect extends SkEffect {
         if (location == null)
             return;
         for (Player player : players)
-            GPS.setLocation(player, location);
+            GPS.setLocationTarget(player, location);
     }
 
     @Override

@@ -21,7 +21,7 @@ public class PlayerJoinQuitListener implements Listener {
     public void eventQuit(final PlayerQuitEvent event) {
         final Player player = event.getPlayer();
 
-        GPS.removeLocation(player);
+        GPS.removeTarget(player);
         try {
             WayPointStorage.savePlayerWaypoints(player);
         } catch (IOException exception) {

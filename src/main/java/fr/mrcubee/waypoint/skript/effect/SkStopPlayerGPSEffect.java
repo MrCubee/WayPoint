@@ -25,7 +25,7 @@ public class SkStopPlayerGPSEffect extends SkEffect {
         final Player[] players = this.playersExpression.getArray(event);
 
         for (Player player : players)
-            GPS.removeLocation(player);
+            GPS.removeTarget(player);
     }
 
     @Override

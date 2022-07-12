@@ -6,6 +6,7 @@ import fr.mrcubee.waypoint.WayPoint;
 import fr.mrcubee.waypoint.WayPointStorage;
 import fr.mrcubee.waypoint.event.Events;
 import fr.mrcubee.waypoint.event.PlayerStartGPSEvent;
+import fr.mrcubee.waypoint.event.PlayerStopGPSEvent;
 import fr.mrcubee.waypoint.tools.LocationTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -27,12 +28,31 @@ import java.util.Set;
  */
 public class GpsCommand implements CommandExecutor, TabCompleter {
 
+
+    private boolean callPlayerGPSStopEvent(final Player player, final GPS.TargetType targetType) {
+        final PlayerStopGPSEvent playerStopGPSEvent;
+
+        switch (targetType) {
+            case PLAYER:
+                playerStopGPSEvent = new PlayerStopGPSEvent(player, GPS.getTargetAsPlayer(player));
+                break;
+            case WAYPOINT:
+                playerStopGPSEvent = new PlayerStopGPSEvent(player, GPS.getTargetAsWaypoint(player));
+                break;
+            default:
+                playerStopGPSEvent = new PlayerStopGPSEvent(player, GPS.getTargetLocation(player));
+                break;
+        }
+        return Events.call(playerStopGPSEvent);
+    }
+
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
         final Player player;
         final Location location;
         final WayPoint wayPoint;
         final Player targetPlayer;
+        final GPS.TargetType targetType;
 
         if (!(sender instanceof Player)) {
             sender.sendMessage(Lang.getMessage("command.must_be_player", "&cLANG ERROR: command.must_be_player", true));
@@ -42,7 +62,10 @@ public class GpsCommand implements CommandExecutor, TabCompleter {
         if (args.length < 1)
             return false;
         if (args[0].equalsIgnoreCase("stop")) {
-            GPS.removeLocation(player);
+            targetType = GPS.getTargetType(player);
+            if (targetType == null || !callPlayerGPSStopEvent(player, targetType))
+                return true;
+            GPS.removeTarget(player);
             player.sendMessage(Lang.getMessage(player, "gps.command.stop", "&cLANG ERROR: gps.command.stop", true));
             return true;
         }
@@ -57,7 +80,7 @@ public class GpsCommand implements CommandExecutor, TabCompleter {
                 }
                 if (!Events.call(new PlayerStartGPSEvent(player, wayPoint)))
                     return true;
-                 GPS.setLocation(player, wayPoint);
+                 GPS.setLocationTarget(player, wayPoint);
                 return true;
             case "player":
                 targetPlayer = Bukkit.getPlayerExact(args[1]);
@@ -67,7 +90,7 @@ public class GpsCommand implements CommandExecutor, TabCompleter {
                 }
                 if (!Events.call(new PlayerStartGPSEvent(player, targetPlayer)))
                     return true;
-                GPS.setLocation(player, targetPlayer);
+                GPS.setTarget(player, targetPlayer);
                 return true;
             default:
                 location = LocationTools.getLocationFromArguments(player, args);
@@ -75,7 +98,7 @@ public class GpsCommand implements CommandExecutor, TabCompleter {
                     return false;
                 if (!Events.call(new PlayerStartGPSEvent(player, location)))
                     return true;
-                GPS.setLocation(player, location);
+                GPS.setLocationTarget(player, location);
                 player.sendMessage(Lang.getMessage(player, "gps.command.start", "&cLANG ERROR: gps.command.start", true));
                 return true;
         }

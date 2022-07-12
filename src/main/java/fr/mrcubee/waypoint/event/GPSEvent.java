@@ -1,5 +1,6 @@
 package fr.mrcubee.waypoint.event;
 
+import fr.mrcubee.waypoint.GPS;
 import fr.mrcubee.waypoint.WayPoint;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -7,43 +8,37 @@ import org.bukkit.event.Event;
 
 public abstract class GPSEvent extends Event {
 
-    public static enum TargetType {
-        LOCATION,
-        WAYPOINT,
-        PLAYER;
-    }
-
-    private final TargetType targetType;
+    private final GPS.TargetType targetType;
     private final Player targetPlayer;
     private final Location target;
 
     public GPSEvent(final Player targetPlayer) {
         this.targetPlayer = targetPlayer;
         this.target = null;
-        this.targetType = TargetType.PLAYER;
+        this.targetType = GPS.TargetType.PLAYER;
     }
 
     public GPSEvent(final Location targetLocation) {
         this.target = targetLocation;
         this.targetPlayer = null;
         if (this.target instanceof WayPoint)
-            this.targetType = TargetType.WAYPOINT;
+            this.targetType = GPS.TargetType.WAYPOINT;
         else
-            this.targetType = TargetType.LOCATION;
+            this.targetType = GPS.TargetType.LOCATION;
     }
 
     public GPSEvent(final WayPoint targetWaypoint) {
         this.target = targetWaypoint;
         this.targetPlayer = null;
-        this.targetType = TargetType.WAYPOINT;
+        this.targetType = GPS.TargetType.WAYPOINT;
     }
 
-    public TargetType getTargetType() {
+    public GPS.TargetType getTargetType() {
         return this.targetType;
     }
 
     public Location getTargetLocation() {
-        if (this.targetType == TargetType.PLAYER) {
+        if (this.targetType == GPS.TargetType.PLAYER) {
             if (this.targetPlayer != null)
                 return this.targetPlayer.getLocation();
             return null;
@@ -52,19 +47,19 @@ public abstract class GPSEvent extends Event {
     }
 
     public Location getLocationTarget() {
-        if (this.targetType != TargetType.LOCATION)
+        if (this.targetType != GPS.TargetType.LOCATION)
             return null;
         return this.target;
     }
 
     public WayPoint getWayPointTarget() {
-        if (this.targetType != TargetType.WAYPOINT)
+        if (this.targetType != GPS.TargetType.WAYPOINT)
             return null;
         return (WayPoint) this.target;
     }
 
     public Player getPlayerTarget() {
-        if (this.targetType != TargetType.PLAYER)
+        if (this.targetType != GPS.TargetType.PLAYER)
             return null;
         return this.targetPlayer;
     }
