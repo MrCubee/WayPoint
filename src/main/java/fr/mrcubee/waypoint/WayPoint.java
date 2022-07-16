@@ -3,6 +3,8 @@ package fr.mrcubee.waypoint;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.util.Objects;
+
 public class WayPoint extends Location {
 
     private final String name;
@@ -27,6 +29,18 @@ public class WayPoint extends Location {
 
     public String getName() {
         return this.name;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.name, super.hashCode());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof WayPoint)
+            return obj.hashCode() == hashCode();
+        return super.equals(obj);
     }
 
 }
