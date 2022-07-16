@@ -30,7 +30,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.target>16</maven.compiler.target>
         <!--suppress UnresolvedMavenProperty -->
         <commit.version>${git.branch.name}-${git.commit.last.sha1_short}</commit.version>
         <plugin.version>${project.version} (git ${commit.version})</plugin.version>
