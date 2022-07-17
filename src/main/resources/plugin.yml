@@ -8,6 +8,7 @@ main: fr.mrcubee.waypoint.WayPointPlugin
 api-version: 1.13
 commands:
   gps:
+    permission: waypoint.gps.use
     description: Enables and disables GPS.
     usage: |
       §7--------------------- [§a${project.name}§7] ---------------------
@@ -19,6 +20,7 @@ commands:
       §7- §a/gps waypoint <name> §f- §7Enable GPS on the desired waypoint.
       §7- §a/gps player <name> §f- §7Enable GPS on the desired player.
   waypoint:
+    permission: waypoint.waypoint.use
     aliases: wp
     description: Manage waypoints.
     usage: |
@@ -29,3 +31,11 @@ commands:
       §7- §a/waypoint create <name> <x> <y> <z> §f- §7Create a waypoint on the desired coordinates.
       §7- §a/waypoint create <name> <x> <y> <z> <world> §f- §7Create a waypoint on the desired coordinates.
       §7- §a/waypoint remove <name> §f- §7Delete a waypoint.
+
+permissions:
+  waypoint.gps.use:
+    description: Permission to use the GPS command.
+    default: true
+  waypoint.waypoint.use:
+    description: Permission to use the Waypoint command.
+    default: true

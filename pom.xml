@@ -6,7 +6,7 @@
 
     <groupId>fr.mrcubee.minecraft.plugin</groupId>
     <artifactId>waypoint</artifactId>
-    <version>1.2</version>
+    <version>1.2.1</version>
     <packaging>jar</packaging>
 
     <name>Waypoint</name>
