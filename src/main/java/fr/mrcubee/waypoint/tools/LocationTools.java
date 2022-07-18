@@ -7,7 +7,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author MrCubee
@@ -15,9 +14,6 @@ import java.util.regex.Pattern;
  * @version 1.0
  */
 public class LocationTools {
-
-    private static final String LOCATION_PATTERN_STR = "(?:x:[ ]*)?(-?[0-9]+)(?:(?:[ ]+|[ ]*y:[ ]*)(-?[0-9]+))?[ ]*(?:[ ]+|z:[ ]*)(-?[0-9]+)(?:[ ]*world:[ ]*?([a-zA-Z0-9_]+))?";
-    public static final Pattern LOCATION_PATTERN = Pattern.compile(LOCATION_PATTERN_STR, Pattern.CASE_INSENSITIVE);
 
     private static Integer[] convertToInteger(String... args) {
         final Integer[] results = new Integer[args.length];

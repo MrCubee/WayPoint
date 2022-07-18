@@ -1,5 +1,8 @@
 package fr.mrcubee.waypoint.listeners;
 
+import fr.mrcubee.waypoint.WayPoint;
+import fr.mrcubee.waypoint.WayPointStorage;
+import fr.mrcubee.waypoint.tools.ChatPattern;
 import fr.mrcubee.waypoint.tools.LocationTools;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -25,13 +28,44 @@ import java.util.regex.Matcher;
  */
 public class AsyncPlayerChatListener implements Listener {
 
-    private BaseComponent[] buildInteractiveMessage(final Player player, final String message, final Matcher matcher) {
+    private static String replaceWaypointVariable(final Player player, final String message) {
+        final StringBuilder stringBuilder;
+        final Matcher matcher;
+        WayPoint wayPoint;
+        int lastIndex;
+
+        if (player == null || message == null)
+            return null;
+        matcher = ChatPattern.WAYPOINT_PATTERN.matcher(message);
+        if (matcher == null)
+            return null;
+        stringBuilder = new StringBuilder();
+        lastIndex = 0;
+        while (matcher.find()) {
+            if (matcher.groupCount() > 0) {
+                wayPoint = WayPointStorage.getPlayerWayPoint(player, matcher.group(1));
+                if (wayPoint != null) {
+                    stringBuilder.append(message, lastIndex, matcher.start());
+                    stringBuilder.append(wayPoint);
+                    lastIndex = matcher.end();
+                }
+            }
+        }
+        stringBuilder.append(message, lastIndex, message.length());
+        return stringBuilder.toString();
+    }
+
+    private static BaseComponent[] buildInteractiveMessage(final Player player, final String message) {
+        final Matcher matcher;
         final List<BaseComponent> messageList;
         int last;
         Location location;
         TextComponent textComponent;
 
-        if (player == null || message == null || matcher == null)
+        if (player == null || message == null)
+            return null;
+        matcher = ChatPattern.LOCATION_PATTERN.matcher(message);
+        if (matcher == null)
             return null;
         last = 0;
         messageList = new LinkedList<BaseComponent>();
@@ -53,10 +87,13 @@ public class AsyncPlayerChatListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void event(final AsyncPlayerChatEvent event) {
-        final String message = String.format(event.getFormat(), event.getPlayer().getName(), event.getMessage());
-        final Matcher matcher = LocationTools.LOCATION_PATTERN.matcher(message);
-        final BaseComponent[] newMessage = buildInteractiveMessage(event.getPlayer(), message, matcher);
+        final Player player = event.getPlayer();
+        final String chatCompleteMessage;
+        final BaseComponent[] newMessage;
 
+        event.setMessage(replaceWaypointVariable(player, event.getMessage()));
+        chatCompleteMessage = String.format(event.getFormat(), player.getName(), event.getMessage());
+        newMessage = buildInteractiveMessage(player, chatCompleteMessage);
         if (newMessage == null)
             return;
         for (Player recipient : event.getRecipients())

@@ -43,4 +43,14 @@ public class WayPoint extends Location {
         return super.equals(obj);
     }
 
+    @Override
+    public String toString() {
+        final World world = getWorld();
+        final String coordinateStr = "x: " + getBlockX() + " y: " + getBlockY() + " z: " + getBlockZ();
+
+        if (world == null)
+            return coordinateStr;
+        return coordinateStr + " world: " + getWorld().getName();
+    }
+
 }

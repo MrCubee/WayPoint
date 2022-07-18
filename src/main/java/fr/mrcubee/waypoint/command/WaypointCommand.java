@@ -29,12 +29,10 @@ public class WaypointCommand implements CommandExecutor, TabExecutor {
 
         if (args.length < 1)
             return false;
-        if (args.length > 3)
-            location = LocationTools.getLocationFromArguments(player, args[1], args[2], args[3]);
-        else if (args.length > 2)
-            location = LocationTools.getLocationFromArguments(player, args[1], args[2]);
-        else
+        if (args.length < 2)
             location = player.getLocation();
+        else
+            location = LocationTools.getLocationFromArguments(player, Arrays.copyOfRange(args, 1, args.length));
         if (location == null)
             return false;
         if (WayPointStorage.getPlayerWayPoint(player, args[0]) != null) {
@@ -108,4 +106,5 @@ public class WaypointCommand implements CommandExecutor, TabExecutor {
         }
         return new ArrayList<String>();
     }
+    
 }
