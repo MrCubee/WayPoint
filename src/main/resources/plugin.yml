@@ -39,3 +39,6 @@ permissions:
   waypoint.waypoint.use:
     description: Permission to use the Waypoint command.
     default: true
+  waypoint.death-waypoint:
+    description: Players with this permission will have a waypoint created at the location of their death.
+    default: true

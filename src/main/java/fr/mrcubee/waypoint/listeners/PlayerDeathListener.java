@@ -25,17 +25,23 @@ public class PlayerDeathListener implements Listener {
     @EventHandler
     public void event(final PlayerRespawnEvent event) {
         final Player player = event.getPlayer();
-        final Location playerLocation = player.getLocation();
-        final Date date = new Date();
-        final String waypointName = Lang.getMessage(player, "waypoint.death.name", "LANG ERROR", false,
+        final Location playerLocation;
+        final Date date;
+        final String waypointName;
+        final WayPoint wayPoint;
+        final PlayerDeathWaypointEvent deathEvent;
+        final WayPoint newWaypoint;
+
+        if (!player.hasPermission("waypoint.death-waypoint"))
+            return;
+        playerLocation = player.getLocation();
+        date = new Date();
+        waypointName = Lang.getMessage(player, "waypoint.death.name", "LANG ERROR", false,
                 formatNumber(date.getDate()),
                 formatNumber(date.getHours()),
                 formatNumber(date.getMinutes()),
                 formatNumber(date.getSeconds()));
-        final WayPoint wayPoint = new WayPoint(waypointName, playerLocation);
-        final PlayerDeathWaypointEvent deathEvent;
-        final WayPoint newWaypoint;
-
+        wayPoint = new WayPoint(waypointName, playerLocation);
         deathEvent = new PlayerDeathWaypointEvent(player, wayPoint);
         if (!Events.call(deathEvent))
             return;
