@@ -36,7 +36,6 @@
         <plugin.version>${project.version} (git ${commit.version})</plugin.version>
     </properties>
 
-
     <repositories>
         <repository>
             <id>mrcubee-public</id>
@@ -52,7 +51,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.13-R0.1-SNAPSHOT</version>
+            <version>1.18.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
