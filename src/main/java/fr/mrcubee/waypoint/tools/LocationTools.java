@@ -21,17 +21,17 @@ public class LocationTools {
     static {
         if (ClassUtil.isExist("org.bukkit.HeightMap")
                 && ClassUtil.isMethodExist(World.class,"getHighestBlockYAt",
-                Integer.class, Integer.class, ClassUtil.getClass("org.bukkit.HeightMap"))) {
+                int.class, int.class, ClassUtil.getClass("org.bukkit.HeightMap"))) {
             HIGHEST_BLOCK = (world, coordX, coordZ) -> {
                 return world.getHighestBlockYAt(coordX, coordZ, HeightMap.WORLD_SURFACE);
             };
-        } else if (ClassUtil.isMethodExist(World.class, "getHighestBlockYAt", Integer.class, Integer.class)) {
+        } else if (ClassUtil.isMethodExist(World.class, "getHighestBlockYAt", int.class, int.class)) {
             HIGHEST_BLOCK = (world, coordX, coordZ) -> {
                 return world.getHighestBlockYAt(coordX, coordZ);
             };
         } else {
             HIGHEST_BLOCK = (world, coordX, coordZ) -> {
-                return 0;
+                return -1;
             };
         }
     }

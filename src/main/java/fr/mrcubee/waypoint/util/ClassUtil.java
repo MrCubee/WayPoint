@@ -27,7 +27,7 @@ public class ClassUtil {
         if (clazz == null || methodName == null)
             return false;
         try {
-            clazz.getMethod(methodName, parameterTypes);
+            clazz.getDeclaredMethod(methodName, parameterTypes);
             return true;
         } catch (Exception ignored) {
             return false;
