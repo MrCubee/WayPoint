@@ -3,7 +3,7 @@ package fr.mrcubee.waypoint;
 import fr.mrcubee.langlib.Lang;
 import fr.mrcubee.waypoint.command.GpsCommand;
 import fr.mrcubee.waypoint.command.WaypointCommand;
-import fr.mrcubee.waypoint.listeners.AsyncPlayerChatListener;
+import fr.mrcubee.waypoint.listeners.AbstractAsyncPlayerChatListener;
 import fr.mrcubee.waypoint.listeners.PlayerDeathListener;
 import fr.mrcubee.waypoint.listeners.PlayerJoinQuitListener;
 import fr.mrcubee.waypoint.skript.WaypointSkriptRegister;
@@ -52,7 +52,9 @@ public class WayPointPlugin extends JavaPlugin {
         Lang.setDefaultLang(getConfig().getString("default_lang"));
         this.gps = new GPS();
         this.gps.runTaskTimerAsynchronously(this, 0L, 5L);
-        pluginManager.registerEvents(new AsyncPlayerChatListener(), this);
+        AbstractAsyncPlayerChatListener.newInstance(abstractAsyncPlayerChatListener -> {
+            pluginManager.registerEvents(abstractAsyncPlayerChatListener, this);
+        });
         pluginManager.registerEvents(new PlayerJoinQuitListener(), this);
         pluginManager.registerEvents(new PlayerDeathListener(), this);
         if (isSkriptInstalled()) {

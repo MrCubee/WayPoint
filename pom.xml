@@ -6,7 +6,7 @@
 
     <groupId>fr.mrcubee.minecraft.plugin</groupId>
     <artifactId>waypoint</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.3</version>
     <packaging>jar</packaging>
 
     <name>Waypoint</name>
@@ -30,7 +30,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>16</maven.compiler.target>
+        <maven.compiler.target>8</maven.compiler.target>
         <!--suppress UnresolvedMavenProperty -->
         <commit.version>${git.branch.name}-${git.commit.last.sha1_short}</commit.version>
         <plugin.version>${project.version} (git ${commit.version})</plugin.version>
@@ -49,15 +49,15 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
+            <groupId>org.spigotmc.</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.18.1-R0.1-SNAPSHOT</version>
+            <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc.</groupId>
+            <groupId>org.spigotmc..</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.18.2-R0.1-SNAPSHOT</version>
+            <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

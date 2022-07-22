@@ -3,22 +3,15 @@ package fr.mrcubee.waypoint.listeners;
 import fr.mrcubee.waypoint.WayPoint;
 import fr.mrcubee.waypoint.WayPointStorage;
 import fr.mrcubee.waypoint.tools.ChatPattern;
-import fr.mrcubee.waypoint.tools.LocationTools;
+import fr.mrcubee.waypoint.util.ClassUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.hover.content.Text;
-import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 
 /**
@@ -26,9 +19,9 @@ import java.util.regex.Matcher;
  * @since 1.0
  * @version 1.0
  */
-public class AsyncPlayerChatListener implements Listener {
+public abstract class AbstractAsyncPlayerChatListener implements Listener {
 
-    private static String replaceWaypointVariable(final Player player, final String message) {
+    protected String replaceWaypointVariable(final Player player, final String message) {
         final StringBuilder stringBuilder;
         final Matcher matcher;
         WayPoint wayPoint;
@@ -55,35 +48,7 @@ public class AsyncPlayerChatListener implements Listener {
         return stringBuilder.toString();
     }
 
-    private static BaseComponent[] buildInteractiveMessage(final Player player, final String message) {
-        final Matcher matcher;
-        final List<BaseComponent> messageList;
-        int last;
-        Location location;
-        TextComponent textComponent;
-
-        if (player == null || message == null)
-            return null;
-        matcher = ChatPattern.LOCATION_PATTERN.matcher(message);
-        if (matcher == null)
-            return null;
-        last = 0;
-        messageList = new LinkedList<BaseComponent>();
-        while (matcher.find()) {
-            location = LocationTools.extractLocationFromMatcher(player, matcher);
-            messageList.addAll(Arrays.asList(TextComponent.fromLegacyText(message.substring(last, matcher.start()))));
-            last = matcher.end();
-            textComponent = new TextComponent(message.substring(matcher.start(), matcher.end()));
-            textComponent.setColor(net.md_5.bungee.api.ChatColor.AQUA);
-            textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, LocationTools.locationToCommand(location)));
-            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(LocationTools.locationToHoverText(location))));
-            messageList.add(textComponent);
-        }
-        if (messageList.size() <= 0)
-            return null;
-        messageList.addAll(Arrays.asList(TextComponent.fromLegacyText(message.substring(last))));
-        return messageList.toArray(new BaseComponent[messageList.size()]);
-    }
+    protected abstract BaseComponent[] buildInteractiveMessage(final Player player, final String message);
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void event(final AsyncPlayerChatEvent event) {
@@ -99,6 +64,24 @@ public class AsyncPlayerChatListener implements Listener {
         for (Player recipient : event.getRecipients())
             recipient.spigot().sendMessage(newMessage);
         event.getRecipients().clear();
+    }
+
+    public static AbstractAsyncPlayerChatListener newInstance() {
+        if (ClassUtil.isExist("net.md_5.bungee.api.chat.hover.content.Text"))
+            return new fr.mrcubee.waypoint.listeners.v1_16_R2.AsyncPlayerChatListener();
+        if (ClassUtil.isExist("net.md_5.bungee.api.chat.TextComponent"))
+            return new fr.mrcubee.waypoint.listeners.v1_8_R3.AsyncPlayerChatListener();
+        return null;
+    }
+
+    public static void newInstance(final Consumer<AbstractAsyncPlayerChatListener> instanceConsumer) {
+        final AbstractAsyncPlayerChatListener instance;
+
+        if (instanceConsumer == null)
+            return;
+        instance = newInstance();
+        if (instance != null)
+            instanceConsumer.accept(instance);
     }
 
 }

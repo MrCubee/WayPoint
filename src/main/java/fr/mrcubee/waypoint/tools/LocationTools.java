@@ -1,5 +1,6 @@
 package fr.mrcubee.waypoint.tools;
 
+import fr.mrcubee.waypoint.util.ClassUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.HeightMap;
 import org.bukkit.Location;
@@ -14,6 +15,26 @@ import java.util.regex.Matcher;
  * @version 1.0
  */
 public class LocationTools {
+
+    private static final HighestBlock HIGHEST_BLOCK;
+
+    static {
+        if (ClassUtil.isExist("org.bukkit.HeightMap")
+                && ClassUtil.isMethodExist(World.class,"getHighestBlockYAt",
+                Integer.class, Integer.class, ClassUtil.getClass("org.bukkit.HeightMap"))) {
+            HIGHEST_BLOCK = (world, coordX, coordZ) -> {
+                return world.getHighestBlockYAt(coordX, coordZ, HeightMap.WORLD_SURFACE);
+            };
+        } else if (ClassUtil.isMethodExist(World.class, "getHighestBlockYAt", Integer.class, Integer.class)) {
+            HIGHEST_BLOCK = (world, coordX, coordZ) -> {
+                return world.getHighestBlockYAt(coordX, coordZ);
+            };
+        } else {
+            HIGHEST_BLOCK = (world, coordX, coordZ) -> {
+                return 0;
+            };
+        }
+    }
 
     private static Integer[] convertToInteger(String... args) {
         final Integer[] results = new Integer[args.length];
@@ -40,7 +61,7 @@ public class LocationTools {
             return null;
         if (args.length < 3) {
             world = player.getWorld();
-            return new Location(world, integers[0], world.getHighestBlockYAt(integers[0], integers[1]) + 1, integers[1]);
+            return new Location(world, integers[0], HIGHEST_BLOCK.getHighestBlockYAt(world, integers[0], integers[1]) + 1, integers[1]);
         } else if (args.length < 4) {
             if (integers[2] != null) {
                 world = player.getWorld();
@@ -49,7 +70,7 @@ public class LocationTools {
             world = WorldTools.getWorld(args[2]);
             if (world == null)
                 return null;
-            return new Location(world, integers[0], world.getHighestBlockYAt(integers[0], integers[1]) + 1, integers[1]);
+            return new Location(world, integers[0], HIGHEST_BLOCK.getHighestBlockYAt(world, integers[0], integers[1]) + 1, integers[1]);
         }
         world = WorldTools.getWorld(args[3]);
         if (world == null)
@@ -99,10 +120,17 @@ public class LocationTools {
         strWorld = matcher.group(4);
         world = strWorld == null ? player.getWorld() : WorldTools.getWorld(strWorld);
         if (strCoordY == null)
-            coordY = world != null ?  world.getHighestBlockYAt(coordX, coordZ, HeightMap.WORLD_SURFACE) + 1 : 0;
+            coordY = world != null ?  HIGHEST_BLOCK.getHighestBlockYAt(world, coordX, coordZ) + 1 : 0;
         else
             coordY = Integer.parseInt(strCoordY);
         return new Location(world, coordX, coordY, coordZ);
+    }
+
+    @FunctionalInterface
+    public static interface HighestBlock {
+
+        public int getHighestBlockYAt(final World world, int coordX, int coordZ);
+
     }
 
 }

@@ -216,7 +216,7 @@ public class WayPointStorage implements ConfigurationSerializable {
         fileConfiguration = YamlConfiguration.loadConfiguration(playersWaypointFile);
         if (fileConfiguration == null)
             return;
-        wayPointStorage = fileConfiguration.getObject("storage", WayPointStorage.class);
+        wayPointStorage = (WayPointStorage) fileConfiguration.get("storage");
         PLAYER_WAYPOINTS_STORAGES.put(player, wayPointStorage);
     }
 

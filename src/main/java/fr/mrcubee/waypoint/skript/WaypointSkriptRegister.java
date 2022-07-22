@@ -13,6 +13,7 @@ import fr.mrcubee.waypoint.WayPointPlugin;
 import fr.mrcubee.waypoint.skript.effect.WaypointSkriptEffectRegister;
 import fr.mrcubee.waypoint.skript.event.WaypointSkriptEventRegister;
 import fr.mrcubee.waypoint.skript.expression.WaypointSkriptExpressionRegister;
+import fr.mrcubee.waypoint.util.ClassUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -22,9 +23,11 @@ import java.io.StreamCorruptedException;
 public class WaypointSkriptRegister {
 
     public static void register(final WayPointPlugin plugin) {
+        final ClassInfo<WayPoint> wayPointClassInfo = new ClassInfo<WayPoint>(WayPoint.class, "waypoint");
+        final ClassInfo<GPS.TargetType> gpsTypeClassInfo = new ClassInfo<GPS.TargetType>(GPS.TargetType.class, "gpstargettype");
+
         Skript.registerAddon(plugin);
-        Classes.registerClass(new ClassInfo<WayPoint>(WayPoint.class, "waypoint")
-                .user("waypoints?")
+        wayPointClassInfo.user("waypoints?")
                 .name("Waypoint")
                 .since("1.2")
                 .parser(new Parser<WayPoint>() {
@@ -79,28 +82,28 @@ public class WaypointSkriptRegister {
                     protected boolean canBeInstantiated() {
                         return false;
                     }
-                })
-                .cloner(WayPoint::clone));
-        Classes.registerClass(new ClassInfo<GPS.TargetType>(GPS.TargetType.class, "gpstargettype")
-                .user("gpstargettypes?")
+                });
+        if (ClassUtil.isExist("ch.njol.skript.classes.Cloner") && ClassUtil.isMethodExist(ClassInfo.class, "cloner", ClassUtil.getClass("ch.njol.skript.classes.Cloner")))
+            wayPointClassInfo.cloner(WayPoint::clone);
+        gpsTypeClassInfo.user("gpstargettypes?")
                 .name("Gps Target Type")
                 .since("1.2")
-                        .parser(new Parser<GPS.TargetType>() {
-                            @Override
-                            public String toString(final GPS.TargetType targetType, final int flags) {
-                                return targetType.name();
-                            }
+                .parser(new Parser<GPS.TargetType>() {
+                    @Override
+                    public String toString(final GPS.TargetType targetType, final int flags) {
+                        return targetType.name();
+                    }
 
-                            @Override
-                            public String toVariableNameString(GPS.TargetType targetType) {
-                                return targetType.name();
-                            }
+                    @Override
+                    public String toVariableNameString(GPS.TargetType targetType) {
+                        return targetType.name();
+                    }
 
-                            @Override
-                            public boolean canParse(final ParseContext context) {
-                                return false;
-                            }
-                        })
+                    @Override
+                    public boolean canParse(final ParseContext context) {
+                        return false;
+                    }
+                })
                 .serializer(new Serializer<GPS.TargetType>() {
                     @Override
                     public Fields serialize(GPS.TargetType targetType) throws NotSerializableException {
@@ -135,7 +138,9 @@ public class WaypointSkriptRegister {
                         return true;
                     }
 
-                }));
+                });
+        Classes.registerClass(wayPointClassInfo);
+        Classes.registerClass(gpsTypeClassInfo);
         WaypointSkriptEventRegister.register();
         WaypointSkriptExpressionRegister.register();
         WaypointSkriptEffectRegister.register();
