@@ -1,2 +1,8 @@
 # You can choose between EN_us, FR_fr.
 default_lang: EN_us
+
+chat:
+  # Parse the chat and display the coordinates in suggestion command.
+  parsing: true
+  # Allows the player to share a waypoint in chat using this format "$waypoint_name$".
+  waypoint: true

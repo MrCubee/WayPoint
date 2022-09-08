@@ -1,6 +1,7 @@
 # Core
 core.skript.load=Load the internal Skript addon.
 core.skript.compatibility=This plugin can be used with Skript plugin.
+core.action_bar.wrong_version=&cThe server or server version is not compatible to send the action bar.
 
 # GPS
 gps.action_bar.location=&6%s &b[x: %d, y: %d, z: %d] &7in &6%d &7blocks

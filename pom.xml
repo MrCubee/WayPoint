@@ -6,7 +6,7 @@
 
     <groupId>fr.mrcubee.minecraft.plugin</groupId>
     <artifactId>waypoint</artifactId>
-    <version>1.2.3</version>
+    <version>1.2.4</version>
     <packaging>jar</packaging>
 
     <name>Waypoint</name>
@@ -69,6 +69,12 @@
         <dependency>
             <groupId>fr.mrcubee.minecraft.library</groupId>
             <artifactId>languagelib</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>fr.mrcubee.minecraft.library</groupId>
+            <artifactId>reflectionlib</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>

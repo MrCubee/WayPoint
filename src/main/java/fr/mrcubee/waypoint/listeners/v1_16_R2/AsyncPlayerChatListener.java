@@ -1,6 +1,5 @@
 package fr.mrcubee.waypoint.listeners.v1_16_R2;
 
-import fr.mrcubee.waypoint.listeners.AbstractAsyncPlayerChatListener;
 import fr.mrcubee.waypoint.tools.ChatPattern;
 import fr.mrcubee.waypoint.tools.LocationTools;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -21,10 +20,9 @@ import java.util.regex.Matcher;
  * @since 1.0
  * @version 1.0
  */
-public class AsyncPlayerChatListener extends AbstractAsyncPlayerChatListener {
+public class AsyncPlayerChatListener {
 
-    @Override
-    protected BaseComponent[] buildInteractiveMessage(final Player player, final String message) {
+    public static BaseComponent[] buildInteractiveMessage(final Player player, final String message) {
         final Matcher matcher;
         final List<BaseComponent> messageList;
         int last;

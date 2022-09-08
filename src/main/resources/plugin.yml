@@ -42,3 +42,5 @@ permissions:
   waypoint.death-waypoint:
     description: Players with this permission will have a waypoint created at the location of their death.
     default: true
+  waypoint.admin:
+    default: false
