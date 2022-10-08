@@ -1,6 +1,6 @@
 package fr.mrcubee.waypoint.tools;
 
-import fr.mrcubee.waypoint.util.ClassUtil;
+import fr.mrcubee.reflect.ClassChecker;
 import org.bukkit.ChatColor;
 import org.bukkit.HeightMap;
 import org.bukkit.Location;
@@ -19,13 +19,13 @@ public class LocationTools {
     private static final HighestBlock HIGHEST_BLOCK;
 
     static {
-        if (ClassUtil.isExist("org.bukkit.HeightMap")
-                && ClassUtil.isMethodExist(World.class,"getHighestBlockYAt",
-                int.class, int.class, ClassUtil.getClass("org.bukkit.HeightMap"))) {
+        if (ClassChecker.checkClass("org.bukkit.HeightMap")
+                && ClassChecker.checkMethod(World.class,"getHighestBlockYAt",
+                int.class, int.class, ClassChecker.getClass("org.bukkit.HeightMap"))) {
             HIGHEST_BLOCK = (world, coordX, coordZ) -> {
                 return world.getHighestBlockYAt(coordX, coordZ, HeightMap.WORLD_SURFACE);
             };
-        } else if (ClassUtil.isMethodExist(World.class, "getHighestBlockYAt", int.class, int.class)) {
+        } else if (ClassChecker.checkMethod(World.class, "getHighestBlockYAt", int.class, int.class)) {
             HIGHEST_BLOCK = (world, coordX, coordZ) -> {
                 return world.getHighestBlockYAt(coordX, coordZ);
             };

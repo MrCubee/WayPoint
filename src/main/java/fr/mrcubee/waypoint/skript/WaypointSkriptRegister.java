@@ -7,13 +7,13 @@ import ch.njol.skript.classes.Serializer;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.yggdrasil.Fields;
+import fr.mrcubee.reflect.ClassChecker;
 import fr.mrcubee.waypoint.GPS;
 import fr.mrcubee.waypoint.WayPoint;
 import fr.mrcubee.waypoint.WayPointPlugin;
 import fr.mrcubee.waypoint.skript.effect.WaypointSkriptEffectRegister;
 import fr.mrcubee.waypoint.skript.event.WaypointSkriptEventRegister;
 import fr.mrcubee.waypoint.skript.expression.WaypointSkriptExpressionRegister;
-import fr.mrcubee.waypoint.util.ClassUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -83,7 +83,7 @@ public class WaypointSkriptRegister {
                         return false;
                     }
                 });
-        if (ClassUtil.isExist("ch.njol.skript.classes.Cloner") && ClassUtil.isMethodExist(ClassInfo.class, "cloner", ClassUtil.getClass("ch.njol.skript.classes.Cloner")))
+        if (ClassChecker.checkClass("ch.njol.skript.classes.Cloner") && ClassChecker.checkMethod(ClassInfo.class, "cloner", ClassChecker.getClass("ch.njol.skript.classes.Cloner")))
             wayPointClassInfo.cloner(WayPoint::clone);
         gpsTypeClassInfo.user("gpstargettypes?")
                 .name("Gps Target Type")
