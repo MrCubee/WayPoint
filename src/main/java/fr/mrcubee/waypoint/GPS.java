@@ -2,15 +2,12 @@ package fr.mrcubee.waypoint;
 
 import fr.mrcubee.langlib.Lang;
 import fr.mrcubee.reflect.ClassChecker;
+import fr.mrcubee.waypoint.tools.ActionBar;
 import fr.mrcubee.waypoint.tools.Direction;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_8_R3.ChatComponentText;
-import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -22,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author MrCubee
  * @since 1.0
- * @version 1.0
+ * @version 1.1
  */
 public class GPS extends BukkitRunnable {
 
@@ -32,15 +29,11 @@ public class GPS extends BukkitRunnable {
 
     public GPS() {
         if (ClassChecker.checkMethod(Player.Spigot.class, "sendMessage", ChatMessageType.class, BaseComponent[].class))
-            this.actionBarSender = (recipient, message) -> recipient.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
+            this.actionBarSender = fr.mrcubee.waypoint.tools.v1_16_R2.ActionBar::send;
         else if (ClassChecker.checkClass("net.minecraft.server.v1_8_R3.PacketPlayOutChat")) {
-            this.actionBarSender = (recipient, message) -> ((CraftPlayer) recipient).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(new ChatComponentText(message), (byte) 2));
+            this.actionBarSender = fr.mrcubee.waypoint.tools.v1_8_R3.ActionBar::send;
         } else {
-            this.actionBarSender = (recipient, message) -> {
-                GPS.removeTarget(recipient);
-                if (recipient.hasPermission("waypoint.admin"))
-                    recipient.sendMessage(Lang.getMessage(recipient, "core.action_bar.wrong_version", "&cLANG ERROR: core.action_bar.wrong_version", true));
-            };
+            this.actionBarSender = ActionBar::send;
         }
     }
     
