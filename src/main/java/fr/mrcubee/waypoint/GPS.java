@@ -83,7 +83,7 @@ public class GPS extends BukkitRunnable {
         if (target instanceof Location) {
             targetLocation = (Location) target;
             if (player.getWorld().equals(targetLocation.getWorld()) && targetLocation.distance(player.getLocation()) < 2) {
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent());
+                this.actionBarSender.send(player, "");
                 return false;
             }
             if (targetLocation instanceof WayPoint)
