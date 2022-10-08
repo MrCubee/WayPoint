@@ -17,6 +17,8 @@ gps.command.start=&7Le GPS est activé.
 gps.command.stop=&7Le GPS est désactivé.
 gps.command.player.not_exist=&cLe joueur n'existe pas ou n'est pas en ligne.
 gps.command.waypoint.not_exist=&cLe waypoint n'existe pas.
+gps.command.player.permission=&cVous n'êtes pas autorisé à utiliser cette commande.
+gps.command.waypoint.permission=&cVous n'êtes pas autorisé à utiliser cette commande.
 
 # Waypoint command
 waypoint.command.already_exist=&cLe waypoint existe déjà.

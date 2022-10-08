@@ -73,6 +73,10 @@ public class GpsCommand implements CommandExecutor, TabCompleter {
             return false;
         switch (args[0].toLowerCase()) {
             case "waypoint":
+                if (!player.hasPermission("waypoint.gps.use.waypoint")) {
+                    player.sendMessage(Lang.getMessage(player, "gps.command.waypoint.permission", "&cLANG ERROR: gps.command.waypoint.permission", true));
+                    return true;
+                }
                 wayPoint = WayPointStorage.getPlayerWayPoint(player, args[1]);
                 if (wayPoint == null) {
                     player.sendMessage(Lang.getMessage(player, "gps.command.waypoint.not_exist", "&cLANG ERROR: gps.command.waypoint.not_exist", true));
@@ -83,6 +87,10 @@ public class GpsCommand implements CommandExecutor, TabCompleter {
                  GPS.setLocationTarget(player, wayPoint);
                 return true;
             case "player":
+                if (!player.hasPermission("waypoint.gps.use.player")) {
+                    player.sendMessage(Lang.getMessage(player, "gps.command.player.permission", "&cLANG ERROR: gps.command.player.permission", true));
+                    return true;
+                }
                 targetPlayer = Bukkit.getPlayerExact(args[1]);
                 if (targetPlayer == null) {
                     player.sendMessage(Lang.getMessage(player, "gps.command.player.not_exist", "&cLANG ERROR: gps.command.player.not_exist", true));
