@@ -52,7 +52,7 @@ public class GPS extends BukkitRunnable {
 
         if (!player.getLocation().getWorld().equals(targetWorld)) {
             message = Lang.getMessage(player, "gps.action_bar.change_world", "&cLANG ERROR: gps.action_bar.change_world", true, targetWorld.getName());
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
+            this.actionBarSender.send(player, message);
             return;
         }
         direction = Direction.getDirectionArrow(player, targetLocation);
