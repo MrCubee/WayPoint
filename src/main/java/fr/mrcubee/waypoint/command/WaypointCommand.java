@@ -19,7 +19,7 @@ import fr.mrcubee.waypoint.tools.LocationTools;
 
 public class WaypointCommand implements CommandExecutor, TabExecutor {
 
-	private static final Collection<String> SUB_COMMANDS = Arrays.asList("create", "reomve");
+	private static final Collection<String> SUB_COMMANDS = Arrays.asList("create", "remove");
 
 	private boolean createWayPoint(final Player player, final String[] args) {
 		final Location location;
