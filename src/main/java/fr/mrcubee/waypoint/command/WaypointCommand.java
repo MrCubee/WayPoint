@@ -1,9 +1,6 @@
 package fr.mrcubee.waypoint.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -22,6 +19,8 @@ import fr.mrcubee.waypoint.tools.LocationTools;
 
 public class WaypointCommand implements CommandExecutor, TabExecutor {
 
+	private static final Collection<String> SUB_COMMANDS = Arrays.asList("create", "reomve");
+
 	private boolean createWayPoint(final Player player, final String[] args) {
 		final Location location;
 		final PlayerCreateWaypointEvent event;
@@ -37,8 +36,7 @@ public class WaypointCommand implements CommandExecutor, TabExecutor {
 		if (location == null)
 			return false;
 		if (WayPointStorage.getPlayerWayPoint(player, args[0]) != null) {
-			player.sendMessage(Lang.getMessage(player, "waypoint.command.already_exist",
-					"&cLANG ERROR: waypoint.command.already_exist", true));
+			player.sendMessage(Lang.getMessage(player, "waypoint.command.already_exist", "&cLANG ERROR: waypoint.command.already_exist", true));
 			return true;
 		}
 		event = new PlayerCreateWaypointEvent(player, new WayPoint(args[0], location));
@@ -50,9 +48,7 @@ public class WaypointCommand implements CommandExecutor, TabExecutor {
 		else
 			created = WayPointStorage.addPlayerWaypoint(player, args[0], location);
 		if (created)
-			player.sendMessage(
-					Lang.getMessage(player, "waypoint.command.created", "&cLANG ERROR: waypoint.command.created", true,
-							newWayPoint == null ? args[0] : newWayPoint.getName()));
+			player.sendMessage(Lang.getMessage(player, "waypoint.command.created", "&cLANG ERROR: waypoint.command.created", true, newWayPoint == null ? args[0] : newWayPoint.getName()));
 		return true;
 	}
 
@@ -63,21 +59,18 @@ public class WaypointCommand implements CommandExecutor, TabExecutor {
 			return false;
 		wayPoint = WayPointStorage.getPlayerWayPoint(player, args[0]);
 		if (wayPoint == null) {
-			player.sendMessage(Lang.getMessage(player, "waypoint.command.not_exist",
-					"&cLANG ERROR: waypoint.command.not_exist", true));
+			player.sendMessage(Lang.getMessage(player, "waypoint.command.not_exist", "&cLANG ERROR: waypoint.command.not_exist", true));
 			return true;
 		}
 		if (!Events.call(new PlayerRemoveWaypointEvent(player, wayPoint)))
 			return true;
 		if (WayPointStorage.removePlayerWaypoint(player, args[0]) != null)
-			player.sendMessage(Lang.getMessage(player, "waypoint.command.removed",
-					"&cLANG ERROR: waypoint.command.removed", true, args[0]));
+			player.sendMessage(Lang.getMessage(player, "waypoint.command.removed", "&cLANG ERROR: waypoint.command.removed", true, args[0]));
 		return true;
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command command, final String label,
-			final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
 		final Player player;
 		final String[] subCommandArgs;
 
@@ -90,41 +83,28 @@ public class WaypointCommand implements CommandExecutor, TabExecutor {
 			return false;
 		subCommandArgs = Arrays.copyOfRange(args, 1, args.length);
 		switch (args[0].toLowerCase()) {
-		case "create":
-			return createWayPoint(player, subCommandArgs);
-		case "remove":
-			return removeWayPoint(player, subCommandArgs);
+			case "create":
+				return createWayPoint(player, subCommandArgs);
+			case "remove":
+				return removeWayPoint(player, subCommandArgs);
 		}
 		return false;
 	}
 
 	@Override
-	public List<String> onTabComplete(final CommandSender sender, final Command command, final String label,
-			final String[] args) {
-		ArrayList<String> result = new ArrayList<String>();
+	public List<String> onTabComplete(final CommandSender sender, final Command command, final String label, final String[] args) {
+		final ArrayList<String> result;
+		final String current = args[args.length - 1].toLowerCase();
+
 		if (!(sender instanceof Player))
 			return null;
-		if (args.length == 1) {
-			final String search = args[0].toLowerCase(Locale.ROOT);
-
-			for (final String cmd : Arrays.asList("create", "remove")) {
-
-				if (cmd.toLowerCase(Locale.ROOT).startsWith(search)) {
-					result.add(cmd);
-				}
-
-			}
-		} else if (args.length == 2 && args[0].equalsIgnoreCase("remove")) {
-			final String search = args[1].toLowerCase(Locale.ROOT);
-
-			for (final String waypoints : WayPointStorage.getPlayerWaypointsName((Player) sender)) {
-
-				if (waypoints.toLowerCase().startsWith(search)) {
-					result.add(waypoints);
-				}
-			}
-		}
+		if (args.length == 1)
+			result = new ArrayList<String>(SUB_COMMANDS);
+		else if (args.length == 2 && args[0].equalsIgnoreCase("remove"))
+			result = new ArrayList<String>(WayPointStorage.getPlayerWaypointsName((Player) sender));
+		else
+			result = new ArrayList<String>();
+		result.removeIf(element -> !element.toLowerCase().startsWith(current));
 		return result;
 	}
-
 }

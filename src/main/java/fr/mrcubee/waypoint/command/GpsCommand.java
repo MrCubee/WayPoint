@@ -1,9 +1,6 @@
 package fr.mrcubee.waypoint.command;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -29,26 +26,27 @@ import fr.mrcubee.waypoint.tools.LocationTools;
  */
 public class GpsCommand implements CommandExecutor, TabCompleter {
 
+	private static final Collection<String> SUB_COMMANDS = Arrays.asList("stop", "waypoint", "player");
+
 	private boolean callPlayerGPSStopEvent(final Player player, final GPS.TargetType targetType) {
 		final PlayerStopGPSEvent playerStopGPSEvent;
 
 		switch (targetType) {
-		case PLAYER:
-			playerStopGPSEvent = new PlayerStopGPSEvent(player, GPS.getTargetAsPlayer(player));
-			break;
-		case WAYPOINT:
-			playerStopGPSEvent = new PlayerStopGPSEvent(player, GPS.getTargetAsWaypoint(player));
-			break;
-		default:
-			playerStopGPSEvent = new PlayerStopGPSEvent(player, GPS.getTargetLocation(player));
-			break;
+			case PLAYER:
+				playerStopGPSEvent = new PlayerStopGPSEvent(player, GPS.getTargetAsPlayer(player));
+				break;
+			case WAYPOINT:
+				playerStopGPSEvent = new PlayerStopGPSEvent(player, GPS.getTargetAsWaypoint(player));
+				break;
+			default:
+				playerStopGPSEvent = new PlayerStopGPSEvent(player, GPS.getTargetLocation(player));
+				break;
 		}
 		return Events.call(playerStopGPSEvent);
 	}
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command command, final String label,
-			final String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
 		final Player player;
 		final Location location;
 		final WayPoint wayPoint;
@@ -73,86 +71,68 @@ public class GpsCommand implements CommandExecutor, TabCompleter {
 		if (args.length < 2)
 			return false;
 		switch (args[0].toLowerCase()) {
-		case "waypoint":
-			if (!player.hasPermission("waypoint.gps.use.waypoint")) {
-				player.sendMessage(Lang.getMessage(player, "gps.command.waypoint.permission",
-						"&cLANG ERROR: gps.command.waypoint.permission", true));
+			case "waypoint":
+				if (!player.hasPermission("waypoint.gps.use.waypoint")) {
+					player.sendMessage(Lang.getMessage(player, "gps.command.waypoint.permission", "&cLANG ERROR: gps.command.waypoint.permission", true));
+					return true;
+				}
+				wayPoint = WayPointStorage.getPlayerWayPoint(player, args[1]);
+				if (wayPoint == null) {
+					player.sendMessage(Lang.getMessage(player, "gps.command.waypoint.not_exist", "&cLANG ERROR: gps.command.waypoint.not_exist", true));
+					return true;
+				}
+				if (!Events.call(new PlayerStartGPSEvent(player, wayPoint)))
+					return true;
+				GPS.setLocationTarget(player, wayPoint);
 				return true;
-			}
-			wayPoint = WayPointStorage.getPlayerWayPoint(player, args[1]);
-			if (wayPoint == null) {
-				player.sendMessage(Lang.getMessage(player, "gps.command.waypoint.not_exist",
-						"&cLANG ERROR: gps.command.waypoint.not_exist", true));
+			case "player":
+				if (!player.hasPermission("waypoint.gps.use.player")) {
+					player.sendMessage(Lang.getMessage(player, "gps.command.player.permission", "&cLANG ERROR: gps.command.player.permission", true));
+					return true;
+				}
+				targetPlayer = Bukkit.getPlayerExact(args[1]);
+				if (targetPlayer == null) {
+					player.sendMessage(Lang.getMessage(player, "gps.command.player.not_exist", "&cLANG ERROR: gps.command.player.not_exist", true));
+					return true;
+				}
+				if (!Events.call(new PlayerStartGPSEvent(player, targetPlayer)))
+					return true;
+				GPS.setTarget(player, targetPlayer);
 				return true;
-			}
-			if (!Events.call(new PlayerStartGPSEvent(player, wayPoint)))
+			default:
+				location = LocationTools.getLocationFromArguments(player, args);
+				if (location == null)
+					return false;
+				if (!Events.call(new PlayerStartGPSEvent(player, location)))
+					return true;
+				GPS.setLocationTarget(player, location);
+				player.sendMessage(Lang.getMessage(player, "gps.command.start", "&cLANG ERROR: gps.command.start", true));
 				return true;
-			GPS.setLocationTarget(player, wayPoint);
-			return true;
-		case "player":
-			if (!player.hasPermission("waypoint.gps.use.player")) {
-				player.sendMessage(Lang.getMessage(player, "gps.command.player.permission",
-						"&cLANG ERROR: gps.command.player.permission", true));
-				return true;
-			}
-			targetPlayer = Bukkit.getPlayerExact(args[1]);
-			if (targetPlayer == null) {
-				player.sendMessage(Lang.getMessage(player, "gps.command.player.not_exist",
-						"&cLANG ERROR: gps.command.player.not_exist", true));
-				return true;
-			}
-			if (!Events.call(new PlayerStartGPSEvent(player, targetPlayer)))
-				return true;
-			GPS.setTarget(player, targetPlayer);
-			return true;
-		default:
-			location = LocationTools.getLocationFromArguments(player, args);
-			if (location == null)
-				return false;
-			if (!Events.call(new PlayerStartGPSEvent(player, location)))
-				return true;
-			GPS.setLocationTarget(player, location);
-			player.sendMessage(Lang.getMessage(player, "gps.command.start", "&cLANG ERROR: gps.command.start", true));
-			return true;
 		}
 	}
 
 	@Override
-	public List<String> onTabComplete(final CommandSender sender, final Command command, final String label,
-			final String[] args) {
-		ArrayList<String> result = new ArrayList<String>();
+	public List<String> onTabComplete(final CommandSender sender, final Command command, final String label, final String[] args) {
+		final ArrayList<String> result;
+		final String current = args[args.length - 1].toLowerCase();
 
 		if (!(sender instanceof Player))
 			return null;
-		if (args.length == 1) {
-			final String search = args[0].toLowerCase(Locale.ROOT);
-
-			for (final String cmd : Arrays.asList("stop", "waypoint", "player")) {
-
-				if (cmd.toLowerCase(Locale.ROOT).startsWith(search)) {
-					result.add(cmd);
-				}
-
-			}
-		} else if (args.length == 2 && args[0].equalsIgnoreCase("waypoint")) {
-			final String search = args[1].toLowerCase(Locale.ROOT);
-
-			for (final String waypoints : WayPointStorage.getPlayerWaypointsName((Player) sender)) {
-
-				if (waypoints.toLowerCase().startsWith(search)) {
-					result.add(waypoints);
-				}
-			}
-		} else if (args.length == 2 && args[0].equalsIgnoreCase("player")) {
-			final String search = args[1].toLowerCase(Locale.ROOT);
-
-			for (final Player pls : Bukkit.getOnlinePlayers()) {
-
-				if (pls.getName().toLowerCase().startsWith(search)) {
-					result.add(pls.getName());
-				}
-			}
+		if (args.length < 2) {
+			result = new ArrayList<String>(SUB_COMMANDS);
+		} else switch (current) {
+			case "waypoint":
+				result = new ArrayList<String>(WayPointStorage.getPlayerWaypointsName((Player) sender));
+				break;
+			case "player":
+				result = null;
+				break;
+			default:
+				result = new ArrayList<String>();
+				break;
 		}
+		if (result != null)
+			result.removeIf(element -> !element.toLowerCase().startsWith(current));
 		return result;
 	}
 }
