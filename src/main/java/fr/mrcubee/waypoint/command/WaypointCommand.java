@@ -94,17 +94,24 @@ public class WaypointCommand implements CommandExecutor, TabExecutor {
 	@Override
 	public List<String> onTabComplete(final CommandSender sender, final Command command, final String label, final String[] args) {
 		final ArrayList<String> result;
-		final String current = args[args.length - 1].toLowerCase();
+		final String subCommand;
+		final String current;
 
 		if (!(sender instanceof Player))
 			return null;
-		if (args.length == 1)
+		current = args[args.length - 1].toLowerCase();
+		if (args.length < 2)
 			result = new ArrayList<String>(SUB_COMMANDS);
-		else if (args.length == 2 && args[0].equalsIgnoreCase("remove"))
-			result = new ArrayList<String>(WayPointStorage.getPlayerWaypointsName((Player) sender));
-		else
+		else if (args.length == 2) {
+			subCommand = args[0].toLowerCase();
+			if (subCommand.equals("remove"))
+				result = new ArrayList<String>(WayPointStorage.getPlayerWaypointsName((Player) sender));
+			else
+				result = new ArrayList<String>();
+		} else
 			result = new ArrayList<String>();
 		result.removeIf(element -> !element.toLowerCase().startsWith(current));
 		return result;
 	}
+
 }

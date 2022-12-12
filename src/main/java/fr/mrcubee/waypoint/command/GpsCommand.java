@@ -114,25 +114,32 @@ public class GpsCommand implements CommandExecutor, TabCompleter {
 	@Override
 	public List<String> onTabComplete(final CommandSender sender, final Command command, final String label, final String[] args) {
 		final ArrayList<String> result;
-		final String current = args[args.length - 1].toLowerCase();
+		final String subCommand;
+		final String current;
 
 		if (!(sender instanceof Player))
 			return null;
+		current = args[args.length - 1].toLowerCase();
 		if (args.length < 2) {
 			result = new ArrayList<String>(SUB_COMMANDS);
-		} else switch (current) {
-			case "waypoint":
-				result = new ArrayList<String>(WayPointStorage.getPlayerWaypointsName((Player) sender));
-				break;
-			case "player":
-				result = null;
-				break;
-			default:
-				result = new ArrayList<String>();
-				break;
-		}
+		} else if (args.length == 2){
+			subCommand = args[0].toLowerCase();
+			switch (subCommand) {
+				case "waypoint":
+					result = new ArrayList<String>(WayPointStorage.getPlayerWaypointsName((Player) sender));
+					break;
+				case "player":
+					result = null;
+					break;
+				default:
+					result = new ArrayList<String>();
+					break;
+			}
+		} else
+			result = new ArrayList<String>();
 		if (result != null)
 			result.removeIf(element -> !element.toLowerCase().startsWith(current));
 		return result;
 	}
+
 }
