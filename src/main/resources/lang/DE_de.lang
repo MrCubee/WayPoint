@@ -1,0 +1,30 @@
+# Core
+core.skript.load=Laden des internen Skript Addons.
+core.skript.compatibility=Dieses Plugin kann mit dem Skript-Plugin verwendet werden.
+core.action_bar.wrong_version=&cDer Server oder die Server-Version ist nicht kompatibel, um die Action-Leiste zu senden.
+
+# GPS
+gps.action_bar.location=&6%s &b[x: %d, y: %d, z: %d] &7in &6%d &7Blöcken
+gps.action_bar.waypoint=&6%s &b[name: %6$s x: %d, y: %d, z: %d] &7in &6%d &7Blöcken
+gps.action_bar.player=&6%s &b[player: %6$s x: %d, y: %d, z: %d] &7in &6%d &7Blöcken
+gps.action_bar.change_world=&7Sie müssen in die Welt &6%s&7 gehen.
+
+# Command
+command.must_be_player=&cSie müssen ein Spieler sein, um diesen Befehl auszuführen.
+
+# GPS Command
+gps.command.start=&7Das GPS ist aktiviert.
+gps.command.stop=&7Das GPS ist deaktiviert.
+gps.command.player.not_exist=&cDer Spieler existiert nicht oder ist nicht online.
+gps.command.waypoint.not_exist=&cDer Waypoint existiert nicht.
+gps.command.player.permission=&cSie sind nicht berechtigt, diesen Befehl zu verwenden.
+gps.command.waypoint.permission=&cSie sind nicht berechtigt, diesen Befehl zu verwenden.
+
+# Waypoint command
+waypoint.command.already_exist=&cDer Waypoint existiert bereits.
+waypoint.command.not_exist=&cDer Waypoint existiert nicht.
+waypoint.command.created=&aDer Waypoint &e%s &awurde erstellt.
+waypoint.command.removed=&aDer Waypoint &e%s &awurde entfernt.
+
+# Death waypoint name
+waypoint.death.name=Tod_%s%s%   s%s

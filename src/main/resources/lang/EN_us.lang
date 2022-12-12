@@ -1,13 +1,13 @@
 # Core
-core.skript.load=Load the internal Skript addon.
-core.skript.compatibility=This plugin can be used with Skript plugin.
-core.action_bar.wrong_version=&cThe server or server version is not compatible to send the action bar.
+core.skript.load=Loading internal Skript addon.
+core.skript.compatibility=This plugin can be used with the Skript plugin.
+core.action_bar.wrong_version=&cThe server or server version is not compatible for sending the action bar.
 
 # GPS
 gps.action_bar.location=&6%s &b[x: %d, y: %d, z: %d] &7in &6%d &7blocks
 gps.action_bar.waypoint=&6%s &b[name: %6$s x: %d, y: %d, z: %d] &7in &6%d &7blocks
 gps.action_bar.player=&6%s &b[player: %6$s x: %d, y: %d, z: %d] &7in &6%d &7blocks
-gps.action_bar.change_world=&7You must go to the &6%s &7world.
+gps.action_bar.change_world=&7You must go to the world &6%s&7.
 
 # Command
 command.must_be_player=&cYou must be a player to run this command.
@@ -15,16 +15,16 @@ command.must_be_player=&cYou must be a player to run this command.
 # GPS Command
 gps.command.start=&7GPS is enabled.
 gps.command.stop=&7GPS is disabled.
-gps.command.player.not_exist=&cThe player does not exist or is not online.
-gps.command.waypoint.not_exist=&cThe waypoint does not exist.
-gps.command.player.permission=&cYou do not have permission to use this command.
-gps.command.waypoint.permission=&cYou do not have permission to use this command.
+gps.command.player.not_exist=&cPlayer does not exist or is not online.
+gps.command.waypoint.not_exist=&cWaypoint does not exist.
+gps.command.player.permission=&cYou are not authorized to use this command.
+gps.command.waypoint.permission=&cYou are not authorized to use this command.
 
 # Waypoint command
-waypoint.command.already_exist=&cThe waypoint already exists.
-waypoint.command.not_exist=&cThe waypoint does not exist.
-waypoint.command.created=&aThe &e%s &awaypoint has been created.
-waypoint.command.removed=&aWaypoint &e%s &ahas been deleted.
+waypoint.command.already_exist=&cWaypoint already exists.
+waypoint.command.not_exist=&cWaypoint does not exist.
+waypoint.command.created=&aWaypoint &e%s &awas created.
+waypoint.command.removed=&aWaypoint &e%s &awas removed.
 
 # Death waypoint name
-waypoint.death.name=lastdeath_%s%s%s%s
+waypoint.death.name=death_%s%s%s%s

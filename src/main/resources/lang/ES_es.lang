@@ -1,0 +1,30 @@
+# Core
+core.skript.load=Cargando el complemento interno Skript.
+core.skript.compatibility=Este complemento puede ser utilizado con el complemento Skript.
+core.action_bar.wrong_version=&cEl servidor o la versión del servidor no es compatible para enviar la barra de acción.
+
+# GPS
+gps.action_bar.location=&6%s &b[x: %d, y: %d, z: %d] &7en &6%d &7bloques
+gps.action_bar.waypoint=&6%s &b[nombre: %6$s x: %d, y: %d, z: %d] &7en &6%d &7bloques
+gps.action_bar.player=&6%s &b[jugador: %6$s x: %d, y: %d, z: %d] &7en &6%d &7bloques
+gps.action_bar.change_world=&7Debes ir al mundo &6%s&7.
+
+# Command
+command.must_be_player=&cDebes ser un jugador para ejecutar este comando.
+
+# GPS Command
+gps.command.start=&7El GPS está activado.
+gps.command.stop=&7El GPS está desactivado.
+gps.command.player.not_exist=&cEl jugador no existe o no está en línea.
+gps.command.waypoint.not_exist=&cEl waypoint no existe.
+gps.command.player.permission=&cNo tienes permiso para usar este comando.
+gps.command.waypoint.permission=&cNo tienes permiso para usar este comando.
+
+# Waypoint command
+waypoint.command.already_exist=&cEl waypoint ya existe.
+waypoint.command.not_exist=&cEl waypoint no existe.
+waypoint.command.created=&aEl waypoint &e%s &a ha sido creado.
+waypoint.command.removed=&aEl waypoint &e%s &a ha sido eliminado.
+
+# Death waypoint name
+waypoint.death.name=muerte_%s%s%s%s

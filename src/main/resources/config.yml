@@ -1,4 +1,14 @@
 # You can choose between EN_us, FR_fr.
+
+#You can choose between:
+#    French -> FR_fr.
+#    English (US)-> EN_us
+#    Deutsch -> DE_de
+#    Chinese Simplified -> ZH_cn
+#    Chinese Traditional -> ZH_hk
+#    Taiwan Mandarin -> ZH_tw
+#    Korean -> KO_kr
+#    European Spanish -> ES_es
 default_lang: EN_us
 
 chat:

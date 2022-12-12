@@ -1,0 +1,30 @@
+# Core
+core.skript.load=加載內置 Skript 附加組件。
+core.skript.compatibility=該插件可與 Skript 插件一起使用。
+core.action_bar.wrong_version=&c伺服器或伺服器版本不相容，無法傳送動作條。
+
+# GPS
+gps.action_bar.location=&6%s &b[x: %d, y: %d, z: %d] &7在 &6%d &7方塊中
+gps.action_bar.waypoint=&6%s &b[名稱: %6$s x: %d, y: %d, z: %d] &7在 &6%d &7方塊中
+gps.action_bar.player=&6%s &b[玩家: %6$s x: %d, y: %d, z: %d] &7在 &6%d &7方塊中
+gps.action_bar.change_world=&7您必須進入世界 &6%s&7。
+
+# Command
+command.must_be_player=&c您必須是玩家才能執行此命令。
+
+# GPS Command
+gps.command.start=&7GPS 已啟用。
+gps.command.stop=&7GPS 已禁用。
+gps.command.player.not_exist=&c該玩家不存在或不在線。
+gps.command.waypoint.not_exist=&c該航點不存在。
+gps.command.player.permission=&c您無權使用此命令。
+gps.command.waypoint.permission=&c您無權使用此命令。
+
+# Waypoint command
+waypoint.command.already_exist=&c該航點已存在。
+waypoint.command.not_exist=&c該航點不存在。
+waypoint.command.created=&a航點 &e%s &a已創建。
+waypoint.command.removed=&a航點 &e%s &a已刪除。
+
+# Death waypoint name
+waypoint.death.name=死亡_%s%s%s%s

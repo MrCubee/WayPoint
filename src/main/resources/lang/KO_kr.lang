@@ -1,0 +1,30 @@
+# Core
+core.skript.load=내부 Skript 애드온 로드
+core.skript.compatibility=이 플러그인은 Skript 플러그인과 함께 사용할 수 있습니다.
+core.action_bar.wrong_version=&c서버 또는 서버 버전은 액션 바를 보낼 수 없습니다.
+
+# GPS
+gps.action_bar.location=&6%s &b[x: %d, y: %d, z: %d] &7dans &6%d &7blocs
+gps.action_bar.waypoint=&6%s &b[이름: %6$s x: %d, y: %d, z: %d] &7in &6%d &7blocks
+gps.action_bar.player=&6%s &b[플레이어: %6$s x: %d, y: %d, z: %d] &7in &6%d &7blocks
+gps.action_bar.change_world=&7당신은 세계 &6%s&7 에 이동해야합니다.
+
+# Command
+command.must_be_player=&c플레이어여야만 이 명령을 실행할 수 있습니다.
+
+# GPS Command
+gps.command.start=&7GPS가 켜졌습니다.
+gps.command.stop=&7GPS가 꺼졌습니다.
+gps.command.player.not_exist=&c해당 플레이어는 존재하지 않거나 온라인이 아닙니다.
+gps.command.waypoint.not_exist=&c해당 웨이포인트는 존재하지 않습니다.
+gps.command.player.permission=&c이 명령을 사용할 권한이 없습니다.
+gps.command.waypoint.permission=&c이 명령을 사용할 권한이 없습니다.
+
+# Waypoint command
+waypoint.command.already_exist=&c이미 존재하는 웨이포인트입니다.
+waypoint.command.not_exist=&c존재하지 않는 웨이포인트입니다.
+waypoint.command.created=&a웨이포인트 &e%s &a가 생성되었습니다.
+waypoint.command.removed=&a웨이포인트 &e%s &a가 삭제되었습니다.
+
+# Death waypoint name
+waypoint.death.name=사망_%s%s%s%s
