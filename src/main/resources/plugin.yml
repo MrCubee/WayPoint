@@ -33,6 +33,9 @@ commands:
       §7- §a/waypoint remove <name> §f- §7Delete a waypoint.
 
 permissions:
+  waypoint.gps.use:
+    description: Permission to use the GPS commands.
+    default: true
   waypoint.gps.use.waypoint:
     description: Permission to use the GPS command to target waypoint.
     default: true
@@ -40,9 +43,10 @@ permissions:
     description: Permission to use the GPS command to target player.
     default: true
   waypoint.gps.use.*:
-    description: Permission to use the GPS command.
+    description: Permission to use all GPS subcommands.
     default: false
     children:
+      waypoint.gps.use: true
       waypoint.gps.use.waypoint: true
       waypoint.gps.use.player: true
   waypoint.waypoint.use:
